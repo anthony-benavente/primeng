@@ -20,6 +20,8 @@ import {trigger,state,style,transition,animate} from '@angular/animations';
 })
 export class AppComponent {
     
+    example: number[] = [1, 2, 3, 4, 5];
+
     menuActive: boolean;
     
     activeMenuId: string;

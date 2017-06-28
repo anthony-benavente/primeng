@@ -3,11 +3,11 @@
         <a href="#" class="menu-button" (click)="onMenuButtonClick($event)">
             <i class="fa fa-bars"></i>
         </a>
-        
+
         <a href="#" class="logo" [routerLink]="['/']">
             <img alt="logo" src="assets/showcase/images/logo.png" />
         </a>
-        
+
         <ul class="topbar-menu">
             <li>
                 <a href="#" [routerLink]="['/setup']">GET STARTED</a>
@@ -18,13 +18,27 @@
                     <li class="topbar-submenu-header">THEMING</li>
                     <li><a [routerLink]="['./theming']">Guide</a></li>
                     <li class="topbar-submenu-header">PREMIUM</li>
-                    <li><a href="http://www.primefaces.org/layouts/paradise-ng"><img src="assets/showcase/images/themeswitcher-paradise.png" alt="Paradise Template"><span class="ui-text">Paradise</span></a></li>
-                    <li><a href="http://www.primefaces.org/layouts/ultima-ng"><img src="assets/showcase/images/themeswitcher-ultima.png" alt="Ultima Template"><span class="ui-text">Ultima</span></a></li>
-                    <li><a href="http://www.primefaces.org/layouts/barcelona-ng"><img src="assets/showcase/images/themeswitcher-barcelona.png" alt="Barcelona Template"><span class="ui-text">Barcelona</span></a></li>
-                    <li><a href="http://www.primefaces.org/layouts/morpheus-ng"><img src="assets/showcase/images/themeswitcher-morpheus.png" alt="Morpheus Template"><span class="ui-text">Morpheus</span></a></li>
-                    <li><a href="http://www.primefaces.org/layouts/atlantis-ng"><img src="assets/showcase/images/themeswitcher-atlantis.png" alt="Atlantis Template"><span class="ui-text">Atlantis</span></a></li>
-                    <li><a href="http://www.primefaces.org/layouts/poseidon-ng"><img src="assets/showcase/images/themeswitcher-poseidon.png" alt="Poseidon Template"><span class="ui-text">Poseidon</span></a></li>
-                    <li><a href="http://www.primefaces.org/layouts/omega-ng"><img src="assets/showcase/images/themeswitcher-omega.png" alt="Omega Template"><span class="ui-text">Omega</span></a></li>
+                    <li>
+                        <a href="http://www.primefaces.org/layouts/paradise-ng"><img src="assets/showcase/images/themeswitcher-paradise.png" alt="Paradise Template"><span class="ui-text">Paradise</span></a>
+                    </li>
+                    <li>
+                        <a href="http://www.primefaces.org/layouts/ultima-ng"><img src="assets/showcase/images/themeswitcher-ultima.png" alt="Ultima Template"><span class="ui-text">Ultima</span></a>
+                    </li>
+                    <li>
+                        <a href="http://www.primefaces.org/layouts/barcelona-ng"><img src="assets/showcase/images/themeswitcher-barcelona.png" alt="Barcelona Template"><span class="ui-text">Barcelona</span></a>
+                    </li>
+                    <li>
+                        <a href="http://www.primefaces.org/layouts/morpheus-ng"><img src="assets/showcase/images/themeswitcher-morpheus.png" alt="Morpheus Template"><span class="ui-text">Morpheus</span></a>
+                    </li>
+                    <li>
+                        <a href="http://www.primefaces.org/layouts/atlantis-ng"><img src="assets/showcase/images/themeswitcher-atlantis.png" alt="Atlantis Template"><span class="ui-text">Atlantis</span></a>
+                    </li>
+                    <li>
+                        <a href="http://www.primefaces.org/layouts/poseidon-ng"><img src="assets/showcase/images/themeswitcher-poseidon.png" alt="Poseidon Template"><span class="ui-text">Poseidon</span></a>
+                    </li>
+                    <li>
+                        <a href="http://www.primefaces.org/layouts/omega-ng"><img src="assets/showcase/images/themeswitcher-omega.png" alt="Omega Template"><span class="ui-text">Omega</span></a>
+                    </li>
                     <li class="topbar-submenu-header" style="margin-top:16px">FREE</li>
                     <li><a href="#" (click)="changeTheme($event, 'omega')"><span class="ui-text">Omega</span></a></li>
                     <li><a href="#" (click)="changeTheme($event, 'bootstrap')"><span class="ui-text">Bootstrap</span></a></li>
@@ -50,12 +64,12 @@
             </li>
         </ul>
     </div>
-    
+
     <div id="layout-sidebar" [ngClass]="{'active': menuActive}">
         <div class="layout-menu">
             <a id="menu_input" #inputmenutitle [class.active-menuitem]="inputmenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === inputmenutitle.id ? null : inputmenutitle.id)">
-                <img src="assets/showcase/images/icons/input-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/input.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/input-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/input.svg" class="layout-menu-icon-inactive" />
                 <span>Input</span>
             </a>
             <div [ngClass]="{submenushow: (inputmenutitle.id == activeMenuId), 'submenuhide': (inputmenutitle.id != activeMenuId)}">
@@ -83,8 +97,8 @@
             </div>
 
             <a id="button_menutitle" #buttonmenutitle [class.active-menuitem]="buttonmenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === buttonmenutitle.id ? null : buttonmenutitle.id)">
-                <img src="assets/showcase/images/icons/button-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/button.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/button-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/button.svg" class="layout-menu-icon-inactive" />
                 <span>Button</span>
             </a>
             <div [ngClass]="{'submenushow': (buttonmenutitle.id == activeMenuId), 'submenuhide': (buttonmenutitle.id != activeMenuId)}">
@@ -93,8 +107,8 @@
             </div>
 
             <a id="data_menutitle" #datamenutitle [class.active-menuitem]="datamenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === datamenutitle.id ? null : datamenutitle.id)">
-                <img src="assets/showcase/images/icons/data-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/data.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/data-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/data.svg" class="layout-menu-icon-inactive" />
                 <span>Data</span>
             </a>
             <div [ngClass]="{'submenushow': (datamenutitle.id == activeMenuId), 'submenuhide': (datamenutitle.id != activeMenuId)}">
@@ -114,8 +128,8 @@
             </div>
 
             <a id="menu_panel" #panelmenutitle [class.active-menuitem]="panelmenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === panelmenutitle.id ? null : panelmenutitle.id)">
-                <img src="assets/showcase/images/icons/panel-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/panel.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/panel-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/panel.svg" class="layout-menu-icon-inactive" />
                 <span>Panel</span>
             </a>
             <div [ngClass]="{'submenushow': (panelmenutitle.id == activeMenuId), 'submenuhide': (panelmenutitle.id != activeMenuId)}">
@@ -128,8 +142,8 @@
             </div>
 
             <a id="menu_overlay" #overlaymenutitle [class.active-menuitem]="overlaymenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === overlaymenutitle.id ? null : overlaymenutitle.id)">
-                <img src="assets/showcase/images/icons/overlay-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/overlay.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/overlay-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/overlay.svg" class="layout-menu-icon-inactive" />
                 <span>Overlay</span>
             </a>
             <div [ngClass]="{'submenushow': (overlaymenutitle.id == activeMenuId), 'submenuhide': (overlaymenutitle.id != activeMenuId)}">
@@ -139,10 +153,10 @@
                 <a [routerLink]="['/overlaypanel']" (click)="menuActive = false">&#9679; OverlayPanel</a>
                 <a [routerLink]="['/tooltip']" (click)="menuActive = false">&#9679; Tooltip</a>
             </div>
-            
+
             <a id="menu_file" #filemenutitle [class.active-menuitem]="filemenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === filemenutitle.id ? null : filemenutitle.id)">
-                <img src="assets/showcase/images/icons/file-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/file.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/file-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/file.svg" class="layout-menu-icon-inactive" />
                 <span>File</span>
             </a>
             <div [ngClass]="{'submenushow': (filemenutitle.id == activeMenuId), 'submenuhide': (filemenutitle.id != activeMenuId)}">
@@ -150,8 +164,8 @@
             </div>
 
             <a id="menu_menu" #menumenutitle [class.active-menuitem]="menumenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === menumenutitle.id ? null : menumenutitle.id)">
-                <img src="assets/showcase/images/icons/menu-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/menu.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/menu-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/menu.svg" class="layout-menu-icon-inactive" />
                 <span>Menu</span>
             </a>
             <div [ngClass]="{'submenushow': (menumenutitle.id == activeMenuId), 'submenuhide': (menumenutitle.id != activeMenuId)}">
@@ -169,8 +183,8 @@
             </div>
 
             <a id="menu_chart" #chartmenutitle [class.active-menuitem]="chartmenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === chartmenutitle.id ? null : chartmenutitle.id)">
-                <img src="assets/showcase/images/icons/charts-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/charts.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/charts-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/charts.svg" class="layout-menu-icon-inactive" />
                 <span>Charts</span>
             </a>
             <div [ngClass]="{'submenushow': (chartmenutitle.id == activeMenuId), 'submenuhide': (chartmenutitle.id != activeMenuId)}">
@@ -184,8 +198,8 @@
             </div>
 
             <a id="menu_messages" #messagesmenutitle [class.active-menuitem]="messagesmenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === messagesmenutitle.id ? null : messagesmenutitle.id)">
-                <img src="assets/showcase/images/icons/message-active.svg" class="layout-menu-icon-active"/>
-                <img src="assets/showcase/images/icons/message.svg" class="layout-menu-icon-inactive"/>
+                <img src="assets/showcase/images/icons/message-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/message.svg" class="layout-menu-icon-inactive" />
                 <span>Messages</span>
             </a>
             <div [ngClass]="{'submenushow': (messagesmenutitle.id == activeMenuId), 'submenuhide': (messagesmenutitle.id != activeMenuId)}">
@@ -193,31 +207,28 @@
                 <a [routerLink]="['/growl']" (click)="menuActive = false">&#9679; Growl</a>
             </div>
 
-            <a id="menu_multimedia" #multimediamenutitle [class.active-menuitem]="multimediamenutitle.id == activeMenuId"
-                    (click)="activeMenuId = (activeMenuId === multimediamenutitle.id ? null : multimediamenutitle.id)">
-                    <img src="assets/showcase/images/icons/multimedia-active.svg" class="layout-menu-icon-active"/>
-                    <img src="assets/showcase/images/icons/multimedia.svg" class="layout-menu-icon-inactive"/>
-                    <span>Multimedia</span>
+            <a id="menu_multimedia" #multimediamenutitle [class.active-menuitem]="multimediamenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === multimediamenutitle.id ? null : multimediamenutitle.id)">
+                <img src="assets/showcase/images/icons/multimedia-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/multimedia.svg" class="layout-menu-icon-inactive" />
+                <span>Multimedia</span>
             </a>
             <div [ngClass]="{'submenushow': (multimediamenutitle.id == activeMenuId), 'submenuhide': (multimediamenutitle.id != activeMenuId)}">
                 <a [routerLink]="['/galleria']" (click)="menuActive = false">&#9679; Galleria</a>
             </div>
-            
-            <a id="menu_dnd" #dndmenutitle [class.active-menuitem]="dndmenutitle.id == activeMenuId"
-                    (click)="activeMenuId = (activeMenuId === dndmenutitle.id ? null : dndmenutitle.id)">
-                    <img src="assets/showcase/images/icons/dragdrop-active.svg" class="layout-menu-icon-active"/>
-                    <img src="assets/showcase/images/icons/dragdrop.svg" class="layout-menu-icon-inactive"/>
-                    <span>DragDrop</span>
+
+            <a id="menu_dnd" #dndmenutitle [class.active-menuitem]="dndmenutitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === dndmenutitle.id ? null : dndmenutitle.id)">
+                <img src="assets/showcase/images/icons/dragdrop-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/dragdrop.svg" class="layout-menu-icon-inactive" />
+                <span>DragDrop</span>
             </a>
             <div [ngClass]="{'submenushow': (dndmenutitle.id == activeMenuId), 'submenuhide': (dndmenutitle.id != activeMenuId)}">
                 <a [routerLink]="['/dragdrop']" (click)="menuActive = false">&#9679; Drag&amp;Drop</a>
             </div>
-            
-            <a id="menu_misc" #misctitle [class.active-menuitem]="misctitle.id == activeMenuId"
-                    (click)="activeMenuId = (activeMenuId === misctitle.id ? null : misctitle.id)">
-                    <img src="assets/showcase/images/icons/misc-active.svg" class="layout-menu-icon-active"/>
-                    <img src="assets/showcase/images/icons/misc.svg" class="layout-menu-icon-inactive"/>
-                    <span>Misc</span>
+
+            <a id="menu_misc" #misctitle [class.active-menuitem]="misctitle.id == activeMenuId" (click)="activeMenuId = (activeMenuId === misctitle.id ? null : misctitle.id)">
+                <img src="assets/showcase/images/icons/misc-active.svg" class="layout-menu-icon-active" />
+                <img src="assets/showcase/images/icons/misc.svg" class="layout-menu-icon-inactive" />
+                <span>Misc</span>
             </a>
             <div [ngClass]="{'submenushow': (misctitle.id == activeMenuId), 'submenuhide': (misctitle.id != activeMenuId)}">
                 <a [routerLink]="['/responsive']" (click)="menuActive = false">&#9679; Responsive</a>
@@ -233,11 +244,14 @@
             </div>
         </div>
     </div>
-    
+
     <div class="layout-mask" *ngIf="menuActive">
     </div>
 
     <div id="layout-content">
+        <ul dnd-sortable-container class="list-group">
+            <li *ngFor="let ex of example" class="list-group-item" dnd-sortable>{{ex}}</li>
+        </ul>
         <div>
             <router-outlet></router-outlet>
         </div>
@@ -247,8 +261,8 @@
             <div class="footer-links">
                 <a href="https://github.com/primefaces/primeng"><i class="fa fa-github"></i></a>
                 <a href="https://twitter.com/prime_ng"><i class="fa fa-twitter"></i></a>
-            <div>
-        </div>
-    </div>
+                <div>
+                </div>
+            </div>
 
-</div>
+        </div>
