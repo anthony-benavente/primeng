@@ -5,9 +5,11 @@ export declare class TabViewNav {
     orientation: string;
     onTabClick: EventEmitter<any>;
     onTabCloseClick: EventEmitter<any>;
+    onTabDropSuccess: EventEmitter<any>;
     getDefaultHeaderClass(tab: TabPanel): string;
     clickTab(event: any, tab: TabPanel): void;
     clickClose(event: any, tab: TabPanel): void;
+    tabDrop(event: any): void;
 }
 export declare class TabPanel {
     header: string;
@@ -32,6 +34,7 @@ export declare class TabView implements AfterContentInit, BlockableUI {
     tabPanels: QueryList<TabPanel>;
     onChange: EventEmitter<any>;
     onClose: EventEmitter<any>;
+    onTabOrderChange: EventEmitter<any>;
     initialized: boolean;
     tabs: TabPanel[];
     private _activeIndex;
@@ -44,6 +47,7 @@ export declare class TabView implements AfterContentInit, BlockableUI {
     findSelectedTab(): TabPanel;
     findTabIndex(tab: TabPanel): number;
     getBlockableElement(): HTMLElement;
+    onDropSuccess(e: any): any;
     activeIndex: number;
 }
 export declare class TabViewModule {
