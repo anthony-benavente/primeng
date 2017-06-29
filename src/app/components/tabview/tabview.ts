@@ -1,4 +1,4 @@
-import {NgModule,Component,ElementRef,Input,Output,EventEmitter,HostListener,AfterContentInit,ContentChildren,QueryList} from '@angular/core';
+import { NgModule, Component, ElementRef, Input, Output, EventEmitter, HostListener, AfterContentInit, ContentChildren, QueryList } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {BlockableUI} from '../common/blockableui';
 import { DndModule } from 'ng2-dnd';
@@ -16,7 +16,7 @@ import { DndModule } from 'ng2-dnd';
         <ng-template ngFor let-tab [ngForOf]="tabs" let-i="index" >
             <li dnd-sortable [sortableIndex]="i" [class]="getDefaultHeaderClass(tab)" [ngStyle]="tab.headerStyle" role="tab"
                 [ngClass]="{'ui-tabview-selected ui-state-active': tab.selected, 'ui-state-disabled': tab.disabled}"
-                (click)="clickTab($event,tab)"
+                (click)="clickTab($event,tab)" (onDropSuccess)="tabDrop($event)" [id]="i"
                 [attr.aria-expanded]="tab.selected" [attr.aria-selected]="tab.selected">
                 <a href="#">
                     <span class="ui-tabview-left-icon fa" [ngClass]="tab.leftIcon" *ngIf="tab.leftIcon"></span>
@@ -37,6 +37,8 @@ export class TabViewNav {
     
     @Output() onTabCloseClick: EventEmitter<any> = new EventEmitter();
     
+    @Output() onTabDropSuccess: EventEmitter<any> = new EventEmitter();
+
     getDefaultHeaderClass(tab:TabPanel) {
         let styleClass = 'ui-state-default ui-corner-' + this.orientation; 
         if(tab && tab.headerStyleClass) {
@@ -57,6 +59,12 @@ export class TabViewNav {
             originalEvent: event,
             tab: tab
         })
+    }
+
+    tabDrop(event: any): void {
+        this.onTabDropSuccess.emit({
+            currentTabs: this.tabs
+        });
     }
 }
 
@@ -87,7 +95,7 @@ export class TabPanel {
     
     @Input() rightIcon: string;
 
-    public id: number;
+    @Input() id: number;
         
     public closed: boolean;
     
@@ -98,13 +106,15 @@ export class TabPanel {
     selector: 'p-tabView',
     template: `
         <div [ngClass]="'ui-tabview ui-widget ui-widget-content ui-corner-all ui-tabview-' + orientation" [ngStyle]="style" [class]="styleClass">
-            <ul dnd-sortable-container p-tabViewNav role="tablist" [sortableData]="tabs" *ngIf="orientation!='bottom'" [tabs]="tabs" [orientation]="orientation" 
-                (onTabClick)="open($event.originalEvent, $event.tab)" (onTabCloseClick)="close($event.originalEvent, $event.tab)" [sortableData]="tabs"></ul>
+            <ul dnd-sortable-container p-tabViewNav role="tablist" *ngIf="orientation!='bottom'" [tabs]="tabs" [orientation]="orientation" 
+                (onTabClick)="open($event.originalEvent, $event.tab)" (onTabCloseClick)="close($event.originalEvent, $event.tab)" [sortableData]="tabs"
+                (onTabDropSuccess)="onDropSuccess($event)"></ul>
             <div class="ui-tabview-panels">
                 <ng-content></ng-content>
             </div>
-            <ul p-tabViewNav role="tablist" *ngIf="orientation=='bottom'" [tabs]="tabs" [orientation]="orientation"
-                (onTabClick)="open($event.originalEvent, $event.tab)" (onTabCloseClick)="close($event.originalEvent, $event.tab)"></ul>
+            <ul p-tabViewNav dnd-sortable-container role="tablist" *ngIf="orientation=='bottom'" [sortableData]="tabs" [tabs]="tabs" [orientation]="orientation"
+                (onTabClick)="open($event.originalEvent, $event.tab)" (onTabCloseClick)="close($event.originalEvent, $event.tab)"
+                (onTabDropSuccess)="onDropSuccess($event)"></ul>
         </div>
     `,
 })
@@ -125,6 +135,8 @@ export class TabView implements AfterContentInit,BlockableUI {
     @Output() onChange: EventEmitter<any> = new EventEmitter();
 
     @Output() onClose: EventEmitter<any> = new EventEmitter();
+
+    @Output() onTabOrderChange: EventEmitter<any> = new EventEmitter();
     
     initialized: boolean;
     
@@ -239,6 +251,11 @@ export class TabView implements AfterContentInit,BlockableUI {
         return this.el.nativeElement.children[0];
     }
     
+    onDropSuccess(e: any): any {
+        // Propogate the change in the order of tabs
+        this.onTabOrderChange.emit(e);
+    }
+
     @Input() get activeIndex(): number {
         return this._activeIndex;
     }
