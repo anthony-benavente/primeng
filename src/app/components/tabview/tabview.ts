@@ -137,6 +137,8 @@ export class TabView implements AfterContentInit,BlockableUI {
     @Output() onClose: EventEmitter<any> = new EventEmitter();
 
     @Output() onTabOrderChange: EventEmitter<any> = new EventEmitter();
+
+    @Output() onTabInit: EventEmitter<any> = new EventEmitter();
     
     initialized: boolean;
     
@@ -152,6 +154,8 @@ export class TabView implements AfterContentInit,BlockableUI {
         this.tabPanels.changes.subscribe(_ => {
             this.initTabs();
         });
+
+        this.onTabInit.emit();
     }
     
     initTabs(): void {
