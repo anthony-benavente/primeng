@@ -288,6 +288,12 @@ myUploader(event) &#123;
                             <td>true</td>
                             <td>Defines the visibility of cancel button for Client-side FileUpload.</td>
                         </tr>
+                        <tr>
+                            <td>files</td>
+                            <td>array</td>
+                            <td>null</td>
+                            <td>List of files to be provide to the FileUpload externally.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -344,6 +350,12 @@ myUploader(event) &#123;
                             <td>onSelect</td>
                             <td>event.originalEvent: Original browser event. <br />
                                 event.files: List of selected files.</td>
+                            <td>Callback to invoke when files are selected.</td>
+                        </tr>
+                        <tr>
+                            <td>onProgress</td>
+                            <td>event.originalEvent: Original browser event. <br />
+                                event.progress: Calculated progress value.</td>
                             <td>Callback to invoke when files are selected.</td>
                         </tr>
                         <tr>

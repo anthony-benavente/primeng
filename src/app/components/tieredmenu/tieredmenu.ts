@@ -1,4 +1,4 @@
-import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,Input,Output,Renderer2,EventEmitter} from '@angular/core';
+import {NgModule,Component,ElementRef,AfterViewInit,OnDestroy,Input,Output,Renderer2} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {DomHandler} from '../dom/domhandler';
 import {MenuItem} from '../common/menuitem';
@@ -72,13 +72,8 @@ export class TieredMenuSub {
             event.preventDefault();
         }
         
-        if(item.command) {
-            if(!item.eventEmitter) {
-                item.eventEmitter = new EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            
-            item.eventEmitter.emit({
+        if(item.command) {            
+            item.command({
                 originalEvent: event,
                 item: item
             });
@@ -130,13 +125,6 @@ export class TieredMenu implements AfterViewInit,OnDestroy {
                 else
                     this.domHandler.appendChild(this.container, this.appendTo);
             }
-            
-            this.documentClickListener = this.renderer.listen('document', 'click', () => {
-                if(!this.preventDocumentDefault) {
-                    this.hide();
-                }
-                this.preventDocumentDefault = false;
-            });
         }
     }
     
@@ -150,38 +138,40 @@ export class TieredMenu implements AfterViewInit,OnDestroy {
     show(event: Event) {
         this.preventDocumentDefault = true;
         this.container.style.display = 'block';
-        this.domHandler.absolutePosition(this.container, event.target);
+        this.domHandler.absolutePosition(this.container, event.currentTarget);
         this.domHandler.fadeIn(this.container, 250);
+        this.bindDocumentClickListener();
     }
     
     hide() {
         this.container.style.display = 'none';
+        this.unbindDocumentClickListener();
+    }
+    
+    unbindDocumentClickListener() {
+        if(this.documentClickListener) {
+            this.documentClickListener();
+            this.documentClickListener = null;
+        }
+    }
+    
+    bindDocumentClickListener() {
+        if(!this.documentClickListener) {
+            this.documentClickListener = this.renderer.listen('document', 'click', () => {
+                if(!this.preventDocumentDefault) {
+                    this.hide();
+                }
+                this.preventDocumentDefault = false;
+            });
+        }
     }
 
-    unsubscribe(item: any) {
-        if(item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
-        }
-        
-        if(item.items) {
-            for(let childItem of item.items) {
-                this.unsubscribe(childItem);
-            }
-        }
-    }
-        
     ngOnDestroy() {
         if(this.popup && this.documentClickListener) {
-            this.documentClickListener();
+            this.unbindDocumentClickListener();
             
             if(this.appendTo) {
                 this.el.nativeElement.appendChild(this.container);
-            }
-        }
-        
-        if(this.model) {
-            for(let item of this.model) {
-                this.unsubscribe(item);
             }
         }
     }

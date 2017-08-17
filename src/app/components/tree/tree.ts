@@ -42,7 +42,7 @@ export class TreeNodeTemplateLoader implements OnInit, OnDestroy {
             <li class="ui-treenode {{node.styleClass}}" *ngIf="!tree.horizontal" [ngClass]="{'ui-treenode-leaf': isLeaf()}">
                 <div class="ui-treenode-content" (click)="onNodeClick($event)" (contextmenu)="onNodeRightClick($event)" (touchend)="onNodeTouchEnd()"
                     (drop)="onDropNode($event)" (dragover)="onDropNodeDragOver($event)" (dragenter)="onDropNodeDragEnter($event)" (dragleave)="onDropNodeDragLeave($event)"
-                    [ngClass]="{'ui-treenode-selectable':tree.selectionMode && node.selectable !== false,'ui-treenode-dragover':draghoverNode}" [draggable]="tree.draggableNodes" (dragstart)="onDragStart($event)" (dragend)="onDragStop($event)">
+                    [ngClass]="{'ui-treenode-selectable':tree.selectionMode && node.selectable !== false,'ui-treenode-dragover':draghoverNode, 'ui-treenode-content-selected':isSelected()}" [draggable]="tree.draggableNodes" (dragstart)="onDragStart($event)" (dragend)="onDragStop($event)">
                     <span class="ui-tree-toggler  fa fa-fw" [ngClass]="{'fa-caret-right':!node.expanded,'fa-caret-down':node.expanded}"
                             (click)="toggle($event)"></span
                     ><div class="ui-chkbox" *ngIf="tree.selectionMode == 'checkbox'"><div class="ui-chkbox-box ui-widget ui-corner-all ui-state-default">
@@ -184,12 +184,14 @@ export class UITreeNode implements OnInit {
         if(this.tree.allowDrop(dragNode, this.node, dragNodeScope) && isValidDropPointIndex) {
             let newNodeList = this.node.parent ? this.node.parent.children : this.tree.value;
             this.tree.dragNodeSubNodes.splice(dragNodeIndex, 1);
-            
+            let dropIndex = this.index;
+
             if(position < 0) {
-                let dropIndex = (this.tree.dragNodeSubNodes === newNodeList) ? ((this.tree.dragNodeIndex > this.index) ? this.index : this.index - 1) : this.index;                
+                dropIndex = (this.tree.dragNodeSubNodes === newNodeList) ? ((this.tree.dragNodeIndex > this.index) ? this.index : this.index - 1) : this.index;                
                 newNodeList.splice(dropIndex, 0, dragNode);
             }
             else {
+				dropIndex = newNodeList.length;
                 newNodeList.push(dragNode);
             }            
             
@@ -201,7 +203,9 @@ export class UITreeNode implements OnInit {
             
             this.tree.onNodeDrop.emit({
                 originalEvent: event,
-                dragNode: dragNode
+                dragNode: dragNode,
+                dropNode: this.node,
+                dropIndex: dropIndex
             });
         }
         
@@ -284,7 +288,8 @@ export class UITreeNode implements OnInit {
                 this.tree.onNodeDrop.emit({
                     originalEvent: event,
                     dragNode: dragNode,
-                    dropNode: this.node
+                    dropNode: this.node,
+                    index: this.index
                 });
             }
         }
