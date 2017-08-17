@@ -30,35 +30,12 @@ var TabMenu = (function () {
             event.preventDefault();
         }
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new core_1.EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });
         }
         this.activeItem = item;
-    };
-    TabMenu.prototype.ngOnDestroy = function () {
-        if (this.model) {
-            for (var _i = 0, _a = this.model; _i < _a.length; _i++) {
-                var item = _a[_i];
-                this.unsubscribe(item);
-            }
-        }
-    };
-    TabMenu.prototype.unsubscribe = function (item) {
-        if (item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
-        }
-        if (item.items) {
-            for (var _i = 0, _a = item.items; _i < _a.length; _i++) {
-                var childItem = _a[_i];
-                this.unsubscribe(childItem);
-            }
-        }
     };
     return TabMenu;
 }());

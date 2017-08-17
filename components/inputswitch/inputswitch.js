@@ -39,7 +39,6 @@ var InputSwitch = (function () {
         this.offContainer = this.domHandler.findSingle(this.container, 'div.ui-inputswitch-off');
         this.onLabelChild = this.domHandler.findSingle(this.onContainer, 'span.ui-inputswitch-onlabel');
         this.offLabelChild = this.domHandler.findSingle(this.offContainer, 'span.ui-inputswitch-offlabel');
-        this.setAriaLabel();
     };
     InputSwitch.prototype.ngAfterViewChecked = function () {
         if (this.container.offsetParent && !this.initialized) {
@@ -81,7 +80,6 @@ var InputSwitch = (function () {
                 this.checked = true;
                 this.checkUI();
             }
-            this.setAriaLabel();
             this.onModelChange(this.checked);
             this.onChange.emit({
                 originalEvent: event,
@@ -95,12 +93,14 @@ var InputSwitch = (function () {
         this.onLabelChild.style.marginLeft = 0 + 'px';
         this.offLabelChild.style.marginRight = -this.offset + 'px';
         this.handle.style.left = this.offset + 'px';
+        this.updateAriaLabel();
     };
     InputSwitch.prototype.uncheckUI = function () {
         this.onContainer.style.width = 0 + 'px';
         this.onLabelChild.style.marginLeft = -this.offset + 'px';
         this.offLabelChild.style.marginRight = 0 + 'px';
         this.handle.style.left = 0 + 'px';
+        this.updateAriaLabel();
     };
     InputSwitch.prototype.onFocus = function (event) {
         this.focused = true;
@@ -127,7 +127,7 @@ var InputSwitch = (function () {
     InputSwitch.prototype.setDisabledState = function (val) {
         this.disabled = val;
     };
-    InputSwitch.prototype.setAriaLabel = function () {
+    InputSwitch.prototype.updateAriaLabel = function () {
         var pattern = /{(.*?)}/, value = this.checked ? this.onLabel : this.offLabel;
         this.ariaLabel = this.ariaLabelTemplate.replace(this.ariaLabelTemplate.match(pattern)[0], value);
     };
@@ -172,7 +172,7 @@ __decorate([
 InputSwitch = __decorate([
     core_1.Component({
         selector: 'p-inputSwitch',
-        template: "\n        <div [ngClass]=\"{'ui-inputswitch ui-widget ui-widget-content ui-corner-all': true,\n            'ui-state-disabled': disabled,'ui-inputswitch-checked':checked}\" (click)=\"toggle($event, in)\"\n            [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-inputswitch-off\">\n                <span class=\"ui-inputswitch-offlabel\">{{offLabel}}</span>\n            </div>\n            <div class=\"ui-inputswitch-on\">\n                <span class=\"ui-inputswitch-onlabel\">{{onLabel}}</span>\n            </div>\n            <div [ngClass]=\"{'ui-inputswitch-handle ui-state-default':true, 'ui-state-focus':focused}\"></div>\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #in type=\"checkbox\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledBy\" aria-live=\"polite\" [attr.id]=\"inputId\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\" readonly=\"readonly\" [attr.tabindex]=\"tabindex\"/>\n            </div>\n        </div>\n    ",
+        template: "\n        <div [ngClass]=\"{'ui-inputswitch ui-widget ui-widget-content ui-corner-all': true,\n            'ui-state-disabled': disabled,'ui-inputswitch-checked':checked, 'ui-state-focus':focused}\" (click)=\"toggle($event, in)\"\n            [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-inputswitch-off\">\n                <span class=\"ui-inputswitch-offlabel\">{{offLabel}}</span>\n            </div>\n            <div class=\"ui-inputswitch-on\">\n                <span class=\"ui-inputswitch-onlabel\">{{onLabel}}</span>\n            </div>\n            <div [ngClass]=\"{'ui-inputswitch-handle ui-state-default':true, 'ui-state-focus':focused}\"></div>\n            <div class=\"ui-helper-hidden-accessible\">\n                <input #in type=\"checkbox\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledBy\" aria-live=\"polite\" [attr.id]=\"inputId\" (focus)=\"onFocus($event)\" (blur)=\"onBlur($event)\" readonly=\"readonly\" [attr.tabindex]=\"tabindex\"/>\n            </div>\n        </div>\n    ",
         providers: [exports.INPUTSWITCH_VALUE_ACCESSOR, domhandler_1.DomHandler]
     }),
     __metadata("design:paramtypes", [core_1.ElementRef, domhandler_1.DomHandler])

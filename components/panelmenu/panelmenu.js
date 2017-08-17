@@ -36,11 +36,7 @@ var BasePanelMenuItem = (function () {
             event.preventDefault();
         }
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new core_1.EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });
@@ -88,25 +84,6 @@ var PanelMenu = (function (_super) {
     function PanelMenu() {
         return _super !== null && _super.apply(this, arguments) || this;
     }
-    PanelMenu.prototype.unsubscribe = function (item) {
-        if (item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
-        }
-        if (item.items) {
-            for (var _i = 0, _a = item.items; _i < _a.length; _i++) {
-                var childItem = _a[_i];
-                this.unsubscribe(childItem);
-            }
-        }
-    };
-    PanelMenu.prototype.ngOnDestroy = function () {
-        if (this.model) {
-            for (var _i = 0, _a = this.model; _i < _a.length; _i++) {
-                var item = _a[_i];
-                this.unsubscribe(item);
-            }
-        }
-    };
     PanelMenu.prototype.handleClick = function (event, item) {
         this.animating = true;
         _super.prototype.handleClick.call(this, event, item);

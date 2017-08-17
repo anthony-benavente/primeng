@@ -49,6 +49,8 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     disabledDates: Array<Date>;
     disabledDays: Array<number>;
     utc: boolean;
+    selectionMode: string;
+    maxDateCount: number;
     onFocus: EventEmitter<any>;
     onBlur: EventEmitter<any>;
     onClose: EventEmitter<any>;
@@ -58,7 +60,7 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     tabindex: number;
     overlayViewChild: ElementRef;
     inputfieldViewChild: ElementRef;
-    value: Date;
+    value: any;
     dates: any[];
     weekDays: string[];
     currentMonthText: string;
@@ -71,8 +73,7 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     overlay: HTMLDivElement;
     overlayVisible: boolean;
     overlayShown: boolean;
-    closeOverlay: boolean;
-    dateClick: boolean;
+    datepickerClick: boolean;
     onModelChange: Function;
     onModelTouched: Function;
     calendarElement: any;
@@ -86,6 +87,7 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     _minDate: Date;
     _maxDate: Date;
     _isValid: boolean;
+    preventDocumentListener: boolean;
     minDate: Date;
     maxDate: Date;
     locale: LocaleSettings;
@@ -98,9 +100,11 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     prevMonth(event: any): void;
     nextMonth(event: any): void;
     onDateSelect(event: any, dateMeta: any): void;
+    shouldSelectDate(dateMeta: any): boolean;
     updateInputfield(): void;
+    formatDateTime(date: any): any;
     selectDate(dateMeta: any): void;
-    updateModel(): void;
+    updateModel(value: any): void;
     getFirstDayOfMonthIndex(month: number, year: number): number;
     getDaysCountInMonth(month: number, year: number): number;
     getDaysCountInPrevMonth(month: number, year: number): number;
@@ -114,6 +118,11 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     };
     getSundayIndex(): number;
     isSelected(dateMeta: any): boolean;
+    isDateEquals(value: any, dateMeta: any): boolean;
+    isDateBetween(start: any, end: any, dateMeta: any): boolean;
+    isSingleSelection(): boolean;
+    isRangeSelection(): boolean;
+    isMultipleSelection(): boolean;
     isToday(today: any, day: any, month: any, year: any): boolean;
     isSelectable(day: any, month: any, year: any): boolean;
     isDateDisabled(day: number, month: number, year: number): boolean;
@@ -134,6 +143,7 @@ export declare class Calendar implements AfterViewInit, AfterViewChecked, OnInit
     toggleAMPM(event: any): void;
     onUserInput(event: any): void;
     parseValueFromString(text: string): Date;
+    parseDateTime(text: any): Date;
     populateTime(value: any, timeString: any, ampm: any): void;
     updateUI(): void;
     onDatePickerClick(event: any): void;

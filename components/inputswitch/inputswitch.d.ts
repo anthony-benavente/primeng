@@ -41,7 +41,7 @@ export declare class InputSwitch implements ControlValueAccessor, AfterViewInit,
     registerOnChange(fn: Function): void;
     registerOnTouched(fn: Function): void;
     setDisabledState(val: boolean): void;
-    setAriaLabel(): void;
+    updateAriaLabel(): void;
 }
 export declare class InputSwitchModule {
 }

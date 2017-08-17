@@ -1,4 +1,4 @@
-import { ElementRef, AfterContentInit, AfterViewInit, AfterViewChecked, OnInit, OnDestroy, ViewContainerRef, EventEmitter, Renderer2, QueryList, TemplateRef, ChangeDetectorRef, EmbeddedViewRef } from '@angular/core';
+import { ElementRef, AfterContentInit, AfterViewInit, AfterViewChecked, OnInit, OnDestroy, ViewContainerRef, IterableDiffers, EventEmitter, Renderer2, QueryList, TemplateRef, ChangeDetectorRef, EmbeddedViewRef, NgZone } from '@angular/core';
 import { Column, HeaderColumnGroup, FooterColumnGroup, PrimeTemplate } from '../common/shared';
 import { LazyLoadEvent } from '../common/lazyloadevent';
 import { FilterMetadata } from '../common/filtermetadata';
@@ -44,6 +44,7 @@ export declare class TableBody {
     dt: DataTable;
     constructor(dt: DataTable);
     columns: Column[];
+    data: any[];
     visibleColumns(): Column[];
 }
 export declare class ScrollableView implements AfterViewInit, AfterViewChecked, OnDestroy {
@@ -51,7 +52,8 @@ export declare class ScrollableView implements AfterViewInit, AfterViewChecked, 
     domHandler: DomHandler;
     el: ElementRef;
     renderer: Renderer2;
-    constructor(dt: DataTable, domHandler: DomHandler, el: ElementRef, renderer: Renderer2);
+    zone: NgZone;
+    constructor(dt: DataTable, domHandler: DomHandler, el: ElementRef, renderer: Renderer2, zone: NgZone);
     columns: Column[];
     scrollHeaderViewChild: ElementRef;
     scrollHeaderBoxViewChild: ElementRef;
@@ -64,7 +66,6 @@ export declare class ScrollableView implements AfterViewInit, AfterViewChecked, 
     width: string;
     virtualScroll: boolean;
     onVirtualScroll: EventEmitter<any>;
-    loading: boolean;
     scrollBody: HTMLDivElement;
     scrollHeader: HTMLDivElement;
     scrollHeaderBox: HTMLDivElement;
@@ -81,20 +82,22 @@ export declare class ScrollableView implements AfterViewInit, AfterViewChecked, 
     ngAfterViewInit(): void;
     ngAfterViewChecked(): void;
     initScrolling(): void;
+    onBodyScroll(event: any): void;
+    onHeaderScroll(event: any): void;
     hasVerticalOverflow(): boolean;
     alignScrollBar(): void;
-    readonly virtualTableHeight: string;
     ngOnDestroy(): void;
 }
 export declare class DataTable implements AfterViewChecked, AfterViewInit, AfterContentInit, OnInit, OnDestroy, BlockableUI {
     el: ElementRef;
     domHandler: DomHandler;
+    differs: IterableDiffers;
     renderer: Renderer2;
     changeDetector: ChangeDetectorRef;
     objectUtils: ObjectUtils;
+    zone: NgZone;
     paginator: boolean;
     rows: number;
-    totalRecords: number;
     pageLinks: number;
     rowsPerPageOptions: number[];
     responsive: boolean;
@@ -131,6 +134,7 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     sortMode: string;
     sortField: string;
     sortOrder: number;
+    defaultSortOrder: number;
     groupField: string;
     multiSortMeta: SortMeta[];
     contextMenu: any;
@@ -141,6 +145,8 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     alwaysShowPaginator: boolean;
     metaKeySelection: boolean;
     rowTrackBy: Function;
+    immutable: boolean;
+    frozenValue: any[];
     compareSelectionBy: string;
     onEditInit: EventEmitter<any>;
     onEditComplete: EventEmitter<any>;
@@ -158,6 +164,7 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     expandedRowsGroups: any[];
     tabindex: number;
     rowStyleClass: Function;
+    rowStyleMap: Object;
     rowGroupMode: string;
     sortableRowGroup: boolean;
     sortFile: string;
@@ -167,6 +174,8 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     };
     dataKey: string;
     loading: boolean;
+    loadingIcon: string;
+    valueChange: EventEmitter<any[]>;
     firstChange: EventEmitter<number>;
     onRowExpand: EventEmitter<any>;
     onRowCollapse: EventEmitter<any>;
@@ -188,19 +197,21 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     sortColumn: Column;
     columnResizing: boolean;
     lastResizerHelperX: number;
-    documentClickListener: Function;
-    documentColumnResizeListener: Function;
+    documentEditListener: Function;
     documentColumnResizeEndListener: Function;
     resizerHelper: any;
     resizeColumn: any;
     reorderIndicatorUp: any;
     reorderIndicatorDown: any;
+    iconWidth: number;
+    iconHeight: number;
     draggedColumn: any;
     dropPosition: number;
     tbody: any;
     rowTouched: boolean;
     rowGroupToggleClick: boolean;
     editingCell: any;
+    virtualTableHeight: number;
     rowGroupMetadata: any;
     rowGroupHeaderTemplate: TemplateRef<any>;
     rowGroupFooterTemplate: TemplateRef<any>;
@@ -209,23 +220,33 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     editorClick: boolean;
     _first: number;
     selectionKeys: any;
-    preventSelectionKeysPropagation: any;
+    preventSelectionKeysPropagation: boolean;
+    preventSortPropagation: boolean;
+    preventRowClickPropagation: boolean;
+    differ: any;
     _selection: any;
+    _totalRecords: number;
     globalFilterFunction: any;
     columnsSubscription: Subscription;
-    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, changeDetector: ChangeDetectorRef, objectUtils: ObjectUtils);
+    totalRecordsChanged: boolean;
+    anchorRowIndex: number;
+    rangeRowIndex: number;
+    constructor(el: ElementRef, domHandler: DomHandler, differs: IterableDiffers, renderer: Renderer2, changeDetector: ChangeDetectorRef, objectUtils: ObjectUtils, zone: NgZone);
     ngOnInit(): void;
     ngAfterContentInit(): void;
     ngAfterViewChecked(): void;
     ngAfterViewInit(): void;
     value: any[];
     first: number;
+    totalRecords: number;
     selection: any;
+    ngDoCheck(): void;
     handleDataChange(): void;
     initColumns(): void;
     resolveFieldData(data: any, field: string): any;
     updateRowGroupMetadata(): void;
     updatePaginator(): void;
+    updateTotalRecords(): void;
     onPageChange(event: any): void;
     paginate(): void;
     updateDataToRender(datasource: any): void;
@@ -240,7 +261,9 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     isSorted(column: Column): boolean;
     getSortOrder(column: Column): number;
     onRowGroupClick(event: any): void;
-    handleRowClick(event: any, rowData: any): void;
+    clearSelectionRange(): void;
+    selectRange(rowIndex: number): void;
+    handleRowClick(event: MouseEvent, rowData: any, index: number): void;
     handleRowTouchEnd(event: Event): void;
     selectRowWithRadio(event: Event, rowData: any): void;
     toggleRowWithCheckbox(event: any, rowData: any): void;
@@ -270,6 +293,8 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     switchCellToEditMode(cell: any, column: Column, rowData: any): void;
     switchCellToViewMode(element: any): void;
     closeCell(): void;
+    bindDocumentEditListener(): void;
+    unbindDocumentEditListener(): void;
     onCellEditorKeydown(event: any, column: Column, rowData: any, rowIndex: number): void;
     moveToPreviousCell(event: KeyboardEvent): void;
     moveToNextCell(event: KeyboardEvent): void;
@@ -279,6 +304,10 @@ export declare class DataTable implements AfterViewChecked, AfterViewInit, After
     onCustomEditorFocusNext(event: KeyboardEvent): void;
     findCell(element: any): any;
     initResizableColumns(): void;
+    onDocumentMouseMove(event: any): void;
+    onDocumentMouseUp(event: any): void;
+    bindColumnResizeEvents(): void;
+    unbindColumnResizeEvents(): void;
     initColumnResize(event: any): void;
     onColumnResize(event: any): void;
     onColumnResizeEnd(event: any): void;

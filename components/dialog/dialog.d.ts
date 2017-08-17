@@ -1,6 +1,6 @@
-import { ElementRef, AfterViewInit, OnDestroy, EventEmitter, Renderer2 } from '@angular/core';
+import { ElementRef, AfterViewInit, AfterViewChecked, OnDestroy, EventEmitter, Renderer2 } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
-export declare class Dialog implements AfterViewInit, OnDestroy {
+export declare class Dialog implements AfterViewInit, AfterViewChecked, OnDestroy {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
@@ -25,6 +25,7 @@ export declare class Dialog implements AfterViewInit, OnDestroy {
     styleClass: string;
     showHeader: boolean;
     breakpoint: number;
+    blockScroll: boolean;
     headerFacet: any;
     footerFacet: any;
     containerViewChild: ElementRef;
@@ -48,8 +49,11 @@ export declare class Dialog implements AfterViewInit, OnDestroy {
     closeIconMouseDown: boolean;
     preWidth: number;
     preventVisibleChangePropagation: boolean;
+    executePostDisplayActions: boolean;
+    initialized: boolean;
     constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2);
     visible: boolean;
+    ngAfterViewChecked(): void;
     show(): void;
     positionOverlay(): void;
     hide(): void;

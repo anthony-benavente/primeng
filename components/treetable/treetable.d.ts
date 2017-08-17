@@ -17,6 +17,7 @@ export declare class UITreeRow implements OnInit {
     isSelected(): boolean;
     onRowClick(event: MouseEvent): void;
     onRowRightClick(event: MouseEvent): void;
+    rowDblClick(event: MouseEvent): void;
     onRowTouchEnd(): void;
     resolveFieldData(data: any, field: string): any;
 }
@@ -35,6 +36,11 @@ export declare class TreeTable implements AfterContentInit {
     metaKeySelection: boolean;
     contextMenu: any;
     toggleColumnIndex: number;
+    tableStyle: any;
+    tableStyleClass: string;
+    collapsedIcon: string;
+    expandedIcon: string;
+    onRowDblclick: EventEmitter<any>;
     selectionChange: EventEmitter<any>;
     onNodeSelect: EventEmitter<any>;
     onNodeUnselect: EventEmitter<any>;

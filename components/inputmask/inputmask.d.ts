@@ -5,7 +5,6 @@ export declare const INPUTMASK_VALUE_ACCESSOR: any;
 export declare class InputMask implements OnInit, OnDestroy, ControlValueAccessor {
     el: ElementRef;
     domHandler: DomHandler;
-    mask: string;
     type: string;
     slotChar: string;
     autoClear: boolean;
@@ -22,8 +21,10 @@ export declare class InputMask implements OnInit, OnDestroy, ControlValueAccesso
     name: string;
     inputViewChild: ElementRef;
     onComplete: EventEmitter<any>;
+    onFocus: EventEmitter<any>;
     onBlur: EventEmitter<any>;
     value: any;
+    _mask: string;
     onModelChange: Function;
     onModelTouched: Function;
     input: HTMLInputElement;
@@ -43,6 +44,8 @@ export declare class InputMask implements OnInit, OnDestroy, ControlValueAccesso
     focus: boolean;
     constructor(el: ElementRef, domHandler: DomHandler);
     ngOnInit(): void;
+    mask: string;
+    initMask(): void;
     writeValue(value: any): void;
     registerOnChange(fn: Function): void;
     registerOnTouched(fn: Function): void;
@@ -64,7 +67,7 @@ export declare class InputMask implements OnInit, OnDestroy, ControlValueAccesso
     clearBuffer(start: any, end: any): void;
     writeBuffer(): void;
     checkVal(allow?: boolean): any;
-    onFocus(event: any): void;
+    onInputFocus(event: any): void;
     onInput(event: any): void;
     handleInputChange(event: any): void;
     getUnmaskedValue(): string;

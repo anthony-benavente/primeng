@@ -1,7 +1,7 @@
-import { ElementRef, OnDestroy, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
 import { MenuItem } from '../common/menuitem';
-export declare class MegaMenu implements OnDestroy {
+export declare class MegaMenu {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
@@ -14,8 +14,6 @@ export declare class MegaMenu implements OnDestroy {
     onItemMouseEnter(event: any, item: any, menuitem: MenuItem): void;
     onItemMouseLeave(event: any, link: any): void;
     itemClick(event: any, item: MenuItem): void;
-    unsubscribe(item: any): void;
-    ngOnDestroy(): void;
     getColumnClass(menuitem: MenuItem): any;
 }
 export declare class MegaMenuModule {

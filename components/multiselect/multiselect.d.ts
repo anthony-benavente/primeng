@@ -1,4 +1,4 @@
-import { ElementRef, OnInit, AfterViewInit, AfterViewChecked, DoCheck, OnDestroy, Renderer2, EventEmitter, IterableDiffers } from '@angular/core';
+import { ElementRef, OnInit, AfterViewInit, AfterViewChecked, DoCheck, OnDestroy, Renderer2, EventEmitter, IterableDiffers, ChangeDetectorRef } from '@angular/core';
 import { SelectItem } from '../common/selectitem';
 import { DomHandler } from '../dom/domhandler';
 import { ObjectUtils } from '../utils/objectutils';
@@ -9,6 +9,7 @@ export declare class MultiSelect implements OnInit, AfterViewInit, AfterViewChec
     domHandler: DomHandler;
     renderer: Renderer2;
     objectUtils: ObjectUtils;
+    private cd;
     options: SelectItem[];
     onChange: EventEmitter<any>;
     onBlur: EventEmitter<any>;
@@ -43,7 +44,7 @@ export declare class MultiSelect implements OnInit, AfterViewInit, AfterViewChec
     filtered: boolean;
     valueDiffer: any;
     optionsDiffer: any;
-    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, differs: IterableDiffers, objectUtils: ObjectUtils);
+    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, differs: IterableDiffers, objectUtils: ObjectUtils, cd: ChangeDetectorRef);
     ngOnInit(): void;
     ngAfterViewInit(): void;
     ngAfterViewChecked(): void;
@@ -68,6 +69,8 @@ export declare class MultiSelect implements OnInit, AfterViewInit, AfterViewChec
     onFilter(event: any): void;
     isItemVisible(option: SelectItem): boolean;
     getVisibleOptions(): SelectItem[];
+    bindDocumentClickListener(): void;
+    unbindDocumentClickListener(): void;
     ngOnDestroy(): void;
 }
 export declare class MultiSelectModule {

@@ -14,17 +14,20 @@ var common_1 = require("@angular/common");
 var shared_1 = require("../common/shared");
 var paginator_1 = require("../paginator/paginator");
 var DataList = (function () {
-    function DataList(el) {
+    function DataList(el, differs) {
         this.el = el;
+        this.differs = differs;
         this.pageLinks = 5;
         this.onLazyLoad = new core_1.EventEmitter();
         this.paginatorPosition = 'bottom';
         this.emptyMessage = 'No records found';
         this.alwaysShowPaginator = true;
         this.trackBy = function (index, item) { return item; };
+        this.immutable = true;
         this.onPage = new core_1.EventEmitter();
         this.first = 0;
         this.page = 0;
+        this.differ = differs.find([]).create(null);
     }
     DataList.prototype.ngAfterContentInit = function () {
         var _this = this;
@@ -53,7 +56,9 @@ var DataList = (function () {
         },
         set: function (val) {
             this._value = val;
-            this.handleDataChange();
+            if (this.immutable) {
+                this.handleDataChange();
+            }
         },
         enumerable: true,
         configurable: true
@@ -63,6 +68,14 @@ var DataList = (function () {
             this.updatePaginator();
         }
         this.updateDataToRender(this.value);
+    };
+    DataList.prototype.ngDoCheck = function () {
+        if (!this.immutable) {
+            var changes = this.differ.diff(this.value);
+            if (changes) {
+                this.handleDataChange();
+            }
+        }
     };
     DataList.prototype.updatePaginator = function () {
         //total records
@@ -169,6 +182,18 @@ __decorate([
     __metadata("design:type", Function)
 ], DataList.prototype, "trackBy", void 0);
 __decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], DataList.prototype, "immutable", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], DataList.prototype, "scrollable", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], DataList.prototype, "scrollHeight", void 0);
+__decorate([
     core_1.Output(),
     __metadata("design:type", core_1.EventEmitter)
 ], DataList.prototype, "onPage", void 0);
@@ -192,9 +217,9 @@ __decorate([
 DataList = __decorate([
     core_1.Component({
         selector: 'p-dataList',
-        template: "\n        <div [ngClass]=\"'ui-datalist ui-widget'\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-datalist-header ui-widget-header ui-corner-top\" *ngIf=\"header\">\n                <ng-content select=\"p-header\"></ng-content>\n            </div>\n            <p-paginator [rows]=\"rows\" [first]=\"first\" [totalRecords]=\"totalRecords\" [pageLinkSize]=\"pageLinks\" [alwaysShow]=\"alwaysShowPaginator\"\n            (onPageChange)=\"paginate($event)\" styleClass=\"ui-paginator-bottom\" [rowsPerPageOptions]=\"rowsPerPageOptions\" *ngIf=\"paginator  && paginatorPosition!='bottom' || paginatorPosition =='both'\"></p-paginator>\n            <div class=\"ui-datalist-content ui-widget-content\">\n                <div *ngIf=\"isEmpty()\" class=\"ui-datalist-emptymessage\">{{emptyMessage}}</div>\n                <ul class=\"ui-datalist-data\">\n                    <li *ngFor=\"let item of dataToRender;let i = index;trackBy: trackBy\">\n                        <ng-template [pTemplateWrapper]=\"itemTemplate\" [item]=\"item\" [index]=\"i\"></ng-template>\n                    </li>\n                </ul>\n            </div>\n            <p-paginator [rows]=\"rows\" [first]=\"first\" [totalRecords]=\"totalRecords\" [pageLinkSize]=\"pageLinks\" [alwaysShow]=\"alwaysShowPaginator\"\n            (onPageChange)=\"paginate($event)\" styleClass=\"ui-paginator-bottom\" [rowsPerPageOptions]=\"rowsPerPageOptions\" *ngIf=\"paginator  && paginatorPosition!='top' || paginatorPosition =='both'\"></p-paginator>\n            <div class=\"ui-datalist-footer ui-widget-header ui-corner-bottom\" *ngIf=\"footer\">\n                <ng-content select=\"p-footer\"></ng-content>\n            </div>\n        </div>\n    "
+        template: "\n        <div [ngClass]=\"{'ui-datalist ui-widget': true, 'ui-datalist-scrollable': scrollable}\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-datalist-header ui-widget-header ui-corner-top\" *ngIf=\"header\">\n                <ng-content select=\"p-header\"></ng-content>\n            </div>\n            <p-paginator [rows]=\"rows\" [first]=\"first\" [totalRecords]=\"totalRecords\" [pageLinkSize]=\"pageLinks\" [alwaysShow]=\"alwaysShowPaginator\"\n            (onPageChange)=\"paginate($event)\" styleClass=\"ui-paginator-bottom\" [rowsPerPageOptions]=\"rowsPerPageOptions\" *ngIf=\"paginator  && paginatorPosition!='bottom' || paginatorPosition =='both'\"></p-paginator>\n            <div class=\"ui-datalist-content ui-widget-content\" [ngStyle]=\"{'max-height': scrollHeight}\">\n                <div *ngIf=\"isEmpty()\" class=\"ui-datalist-emptymessage\">{{emptyMessage}}</div>\n                <ul class=\"ui-datalist-data\">\n                    <li *ngFor=\"let item of dataToRender;let i = index;trackBy: trackBy\">\n                        <ng-template [pTemplateWrapper]=\"itemTemplate\" [item]=\"item\" [index]=\"i\"></ng-template>\n                    </li>\n                </ul>\n            </div>\n            <p-paginator [rows]=\"rows\" [first]=\"first\" [totalRecords]=\"totalRecords\" [pageLinkSize]=\"pageLinks\" [alwaysShow]=\"alwaysShowPaginator\"\n            (onPageChange)=\"paginate($event)\" styleClass=\"ui-paginator-bottom\" [rowsPerPageOptions]=\"rowsPerPageOptions\" *ngIf=\"paginator  && paginatorPosition!='top' || paginatorPosition =='both'\"></p-paginator>\n            <div class=\"ui-datalist-footer ui-widget-header ui-corner-bottom\" *ngIf=\"footer\">\n                <ng-content select=\"p-footer\"></ng-content>\n            </div>\n        </div>\n    "
     }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
+    __metadata("design:paramtypes", [core_1.ElementRef, core_1.IterableDiffers])
 ], DataList);
 exports.DataList = DataList;
 var DataListModule = (function () {

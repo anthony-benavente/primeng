@@ -142,6 +142,9 @@ var AccordionTab = (function () {
     AccordionTab.prototype.onToggleDone = function (event) {
         this.animating = false;
     };
+    AccordionTab.prototype.ngOnDestroy = function () {
+        this.accordion.tabs.splice(this.findTabIndex(), 1);
+    };
     return AccordionTab;
 }());
 __decorate([

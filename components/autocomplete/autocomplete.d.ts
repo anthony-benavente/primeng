@@ -1,14 +1,15 @@
-import { ElementRef, AfterViewInit, AfterViewChecked, EventEmitter, QueryList, TemplateRef, Renderer2, ChangeDetectorRef } from '@angular/core';
+import { ElementRef, AfterViewInit, DoCheck, AfterViewChecked, EventEmitter, QueryList, TemplateRef, Renderer2, ChangeDetectorRef, IterableDiffers } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
 import { ObjectUtils } from '../utils/objectutils';
 import { ControlValueAccessor } from '@angular/forms';
 export declare const AUTOCOMPLETE_VALUE_ACCESSOR: any;
-export declare class AutoComplete implements AfterViewInit, AfterViewChecked, ControlValueAccessor {
+export declare class AutoComplete implements AfterViewInit, AfterViewChecked, DoCheck, ControlValueAccessor {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
     objectUtils: ObjectUtils;
     cd: ChangeDetectorRef;
+    differs: IterableDiffers;
     minLength: number;
     delay: number;
     style: any;
@@ -31,6 +32,7 @@ export declare class AutoComplete implements AfterViewInit, AfterViewChecked, Co
     onBlur: EventEmitter<any>;
     onDropdownClick: EventEmitter<any>;
     onClear: EventEmitter<any>;
+    onKeyUp: EventEmitter<any>;
     field: string;
     scrollHeight: string;
     dropdown: boolean;
@@ -38,6 +40,7 @@ export declare class AutoComplete implements AfterViewInit, AfterViewChecked, Co
     tabindex: number;
     dataKey: string;
     emptyMessage: string;
+    immutable: boolean;
     inputEL: ElementRef;
     multiInputEL: ElementRef;
     panelEL: ElementRef;
@@ -50,7 +53,6 @@ export declare class AutoComplete implements AfterViewInit, AfterViewChecked, Co
     onModelChange: Function;
     onModelTouched: Function;
     timeout: any;
-    differ: any;
     panelVisible: boolean;
     documentClickListener: any;
     suggestionsUpdated: boolean;
@@ -61,8 +63,11 @@ export declare class AutoComplete implements AfterViewInit, AfterViewChecked, Co
     inputClick: boolean;
     inputKeyDown: boolean;
     noResults: boolean;
-    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, objectUtils: ObjectUtils, cd: ChangeDetectorRef);
+    differ: any;
+    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, objectUtils: ObjectUtils, cd: ChangeDetectorRef, differs: IterableDiffers);
     suggestions: any[];
+    ngDoCheck(): void;
+    handleSuggestionsChange(): void;
     ngAfterContentInit(): void;
     ngAfterViewInit(): void;
     ngAfterViewChecked(): void;
@@ -81,9 +86,9 @@ export declare class AutoComplete implements AfterViewInit, AfterViewChecked, Co
     focusInput(): void;
     removeItem(item: any): void;
     onKeydown(event: any): void;
+    onKeyup(event: any): void;
     onInputFocus(event: any): void;
     onInputBlur(event: any): void;
-    onInputChange(event: any): void;
     isSelected(val: any): boolean;
     findOptionIndex(option: any): number;
     updateFilledState(): void;

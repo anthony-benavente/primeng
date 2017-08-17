@@ -13,6 +13,8 @@ export declare class GMap implements AfterViewChecked, DoCheck {
     onOverlayDrag: EventEmitter<any>;
     onOverlayDragEnd: EventEmitter<any>;
     onMapReady: EventEmitter<any>;
+    onMapDragEnd: EventEmitter<any>;
+    onZoomChanged: EventEmitter<any>;
     differ: any;
     map: any;
     constructor(el: ElementRef, differs: IterableDiffers, cd: ChangeDetectorRef, zone: NgZone);

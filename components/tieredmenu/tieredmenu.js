@@ -42,11 +42,7 @@ var TieredMenuSub = (function () {
             event.preventDefault();
         }
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new core_1.EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });
@@ -81,7 +77,6 @@ var TieredMenu = (function () {
         this.renderer = renderer;
     }
     TieredMenu.prototype.ngAfterViewInit = function () {
-        var _this = this;
         this.container = this.el.nativeElement.children[0];
         if (this.popup) {
             if (this.appendTo) {
@@ -90,12 +85,6 @@ var TieredMenu = (function () {
                 else
                     this.domHandler.appendChild(this.container, this.appendTo);
             }
-            this.documentClickListener = this.renderer.listen('document', 'click', function () {
-                if (!_this.preventDocumentDefault) {
-                    _this.hide();
-                }
-                _this.preventDocumentDefault = false;
-            });
         }
     };
     TieredMenu.prototype.toggle = function (event) {
@@ -107,34 +96,36 @@ var TieredMenu = (function () {
     TieredMenu.prototype.show = function (event) {
         this.preventDocumentDefault = true;
         this.container.style.display = 'block';
-        this.domHandler.absolutePosition(this.container, event.target);
+        this.domHandler.absolutePosition(this.container, event.currentTarget);
         this.domHandler.fadeIn(this.container, 250);
+        this.bindDocumentClickListener();
     };
     TieredMenu.prototype.hide = function () {
         this.container.style.display = 'none';
+        this.unbindDocumentClickListener();
     };
-    TieredMenu.prototype.unsubscribe = function (item) {
-        if (item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
+    TieredMenu.prototype.unbindDocumentClickListener = function () {
+        if (this.documentClickListener) {
+            this.documentClickListener();
+            this.documentClickListener = null;
         }
-        if (item.items) {
-            for (var _i = 0, _a = item.items; _i < _a.length; _i++) {
-                var childItem = _a[_i];
-                this.unsubscribe(childItem);
-            }
+    };
+    TieredMenu.prototype.bindDocumentClickListener = function () {
+        var _this = this;
+        if (!this.documentClickListener) {
+            this.documentClickListener = this.renderer.listen('document', 'click', function () {
+                if (!_this.preventDocumentDefault) {
+                    _this.hide();
+                }
+                _this.preventDocumentDefault = false;
+            });
         }
     };
     TieredMenu.prototype.ngOnDestroy = function () {
         if (this.popup && this.documentClickListener) {
-            this.documentClickListener();
+            this.unbindDocumentClickListener();
             if (this.appendTo) {
                 this.el.nativeElement.appendChild(this.container);
-            }
-        }
-        if (this.model) {
-            for (var _i = 0, _a = this.model; _i < _a.length; _i++) {
-                var item = _a[_i];
-                this.unsubscribe(item);
             }
         }
     };

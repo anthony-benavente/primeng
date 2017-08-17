@@ -22,6 +22,8 @@ var GMap = (function () {
         this.onOverlayDrag = new core_1.EventEmitter();
         this.onOverlayDragEnd = new core_1.EventEmitter();
         this.onMapReady = new core_1.EventEmitter();
+        this.onMapDragEnd = new core_1.EventEmitter();
+        this.onZoomChanged = new core_1.EventEmitter();
         this.differ = differs.find([]).create(null);
     }
     GMap.prototype.ngAfterViewChecked = function () {
@@ -45,6 +47,16 @@ var GMap = (function () {
         this.map.addListener('click', function (event) {
             _this.zone.run(function () {
                 _this.onMapClick.emit(event);
+            });
+        });
+        this.map.addListener('dragend', function (event) {
+            _this.zone.run(function () {
+                _this.onMapDragEnd.emit(event);
+            });
+        });
+        this.map.addListener('zoom_changed', function (event) {
+            _this.zone.run(function () {
+                _this.onZoomChanged.emit(event);
             });
         });
     };
@@ -160,6 +172,14 @@ __decorate([
     core_1.Output(),
     __metadata("design:type", core_1.EventEmitter)
 ], GMap.prototype, "onMapReady", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", core_1.EventEmitter)
+], GMap.prototype, "onMapDragEnd", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", core_1.EventEmitter)
+], GMap.prototype, "onZoomChanged", void 0);
 GMap = __decorate([
     core_1.Component({
         selector: 'p-gmap',

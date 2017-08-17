@@ -54,11 +54,7 @@ var SplitButton = (function () {
             event.preventDefault();
         }
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new core_1.EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });

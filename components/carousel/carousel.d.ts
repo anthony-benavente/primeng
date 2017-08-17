@@ -1,9 +1,10 @@
-import { ElementRef, AfterViewInit, AfterViewChecked, EventEmitter, OnDestroy, TemplateRef, QueryList, Renderer2 } from '@angular/core';
+import { ElementRef, AfterViewInit, AfterViewChecked, EventEmitter, OnDestroy, TemplateRef, QueryList, Renderer2, ChangeDetectorRef } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
 export declare class Carousel implements AfterViewChecked, AfterViewInit, OnDestroy {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
+    cd: ChangeDetectorRef;
     numVisible: number;
     firstVisible: number;
     headerText: string;
@@ -35,7 +36,7 @@ export declare class Carousel implements AfterViewChecked, AfterViewInit, OnDest
     itemsViewChild: ElementRef;
     documentResponsiveListener: any;
     differ: any;
-    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2);
+    constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, cd: ChangeDetectorRef);
     ngAfterContentInit(): void;
     value: any[];
     handleDataChange(): void;

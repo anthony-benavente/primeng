@@ -1,4 +1,4 @@
-import { ElementRef, EventEmitter, QueryList } from '@angular/core';
+import { ElementRef, OnDestroy, EventEmitter, QueryList } from '@angular/core';
 import { BlockableUI } from '../common/blockableui';
 export declare class Accordion implements BlockableUI {
     el: ElementRef;
@@ -15,7 +15,7 @@ export declare class Accordion implements BlockableUI {
     getBlockableElement(): HTMLElement;
     activeIndex: any;
 }
-export declare class AccordionTab {
+export declare class AccordionTab implements OnDestroy {
     accordion: Accordion;
     header: string;
     selected: boolean;
@@ -29,6 +29,7 @@ export declare class AccordionTab {
     readonly lazy: boolean;
     readonly hasHeaderFacet: boolean;
     onToggleDone(event: Event): void;
+    ngOnDestroy(): void;
 }
 export declare class AccordionModule {
 }

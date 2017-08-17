@@ -14,17 +14,20 @@ var common_1 = require("@angular/common");
 var shared_1 = require("../common/shared");
 var paginator_1 = require("../paginator/paginator");
 var DataGrid = (function () {
-    function DataGrid(el) {
+    function DataGrid(el, differs) {
         this.el = el;
+        this.differs = differs;
         this.pageLinks = 5;
         this.emptyMessage = 'No records found';
         this.onLazyLoad = new core_1.EventEmitter();
         this.paginatorPosition = 'bottom';
         this.alwaysShowPaginator = true;
         this.trackBy = function (index, item) { return item; };
+        this.immutable = true;
         this.onPage = new core_1.EventEmitter();
         this.first = 0;
         this.page = 0;
+        this.differ = differs.find([]).create(null);
     }
     DataGrid.prototype.ngAfterViewInit = function () {
         if (this.lazy) {
@@ -53,7 +56,9 @@ var DataGrid = (function () {
         },
         set: function (val) {
             this._value = val;
-            this.handleDataChange();
+            if (this.immutable) {
+                this.handleDataChange();
+            }
         },
         enumerable: true,
         configurable: true
@@ -63,6 +68,14 @@ var DataGrid = (function () {
             this.updatePaginator();
         }
         this.updateDataToRender(this.value);
+    };
+    DataGrid.prototype.ngDoCheck = function () {
+        if (!this.immutable) {
+            var changes = this.differ.diff(this.value);
+            if (changes) {
+                this.handleDataChange();
+            }
+        }
     };
     DataGrid.prototype.updatePaginator = function () {
         //total records
@@ -169,6 +182,10 @@ __decorate([
     __metadata("design:type", Function)
 ], DataGrid.prototype, "trackBy", void 0);
 __decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], DataGrid.prototype, "immutable", void 0);
+__decorate([
     core_1.Output(),
     __metadata("design:type", core_1.EventEmitter)
 ], DataGrid.prototype, "onPage", void 0);
@@ -194,7 +211,7 @@ DataGrid = __decorate([
         selector: 'p-dataGrid',
         template: "\n        <div [ngClass]=\"'ui-datagrid ui-widget'\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div class=\"ui-datagrid-header ui-widget-header ui-corner-top\" *ngIf=\"header\">\n                <ng-content select=\"p-header\"></ng-content>\n            </div>\n            <p-paginator [rows]=\"rows\" [first]=\"first\" [totalRecords]=\"totalRecords\" [pageLinkSize]=\"pageLinks\" [alwaysShow]=\"alwaysShowPaginator\"\n                (onPageChange)=\"paginate($event)\" styleClass=\"ui-paginator-bottom\" [rowsPerPageOptions]=\"rowsPerPageOptions\" *ngIf=\"paginator && paginatorPosition!='bottom' || paginatorPosition =='both'\"></p-paginator>\n            <div class=\"ui-datagrid-content ui-widget-content\">\n                <div class=\"ui-g\">\n                    <ng-template ngFor [ngForOf]=\"dataToRender\" [ngForTemplate]=\"itemTemplate\" [ngForTrackBy]=\"trackBy\"></ng-template>\n                    <div *ngIf=\"isEmpty()\" class=\"ui-widget-content ui-g-12\">{{emptyMessage}}</div>\n                </div>\n            </div>\n            <p-paginator [rows]=\"rows\" [first]=\"first\" [totalRecords]=\"totalRecords\" [pageLinkSize]=\"pageLinks\" [alwaysShow]=\"alwaysShowPaginator\"\n                (onPageChange)=\"paginate($event)\" styleClass=\"ui-paginator-bottom\" [rowsPerPageOptions]=\"rowsPerPageOptions\" *ngIf=\"paginator && paginatorPosition!='top' || paginatorPosition =='both'\"></p-paginator>\n            <div class=\"ui-datagrid-footer ui-widget-header ui-corner-top\" *ngIf=\"footer\">\n                <ng-content select=\"p-footer\"></ng-content>\n            </div>\n        </div>\n    "
     }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
+    __metadata("design:paramtypes", [core_1.ElementRef, core_1.IterableDiffers])
 ], DataGrid);
 exports.DataGrid = DataGrid;
 var DataGridModule = (function () {

@@ -54,11 +54,30 @@ var InputMask = (function () {
         this.slotChar = '_';
         this.autoClear = true;
         this.onComplete = new core_1.EventEmitter();
+        this.onFocus = new core_1.EventEmitter();
         this.onBlur = new core_1.EventEmitter();
         this.onModelChange = function () { };
         this.onModelTouched = function () { };
     }
     InputMask.prototype.ngOnInit = function () {
+        var ua = this.domHandler.getUserAgent();
+        this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
+        this.initMask();
+    };
+    Object.defineProperty(InputMask.prototype, "mask", {
+        get: function () {
+            return this._mask;
+        },
+        set: function (val) {
+            this._mask = val;
+            this.initMask();
+            this.writeValue('');
+            this.onModelChange(this.value);
+        },
+        enumerable: true,
+        configurable: true
+    });
+    InputMask.prototype.initMask = function () {
         this.tests = [];
         this.partialPosition = this.mask.length;
         this.len = this.mask.length;
@@ -68,8 +87,6 @@ var InputMask = (function () {
             'a': '[A-Za-z]',
             '*': '[A-Za-z0-9]'
         };
-        var ua = this.domHandler.getUserAgent();
-        this.androidChrome = /chrome/i.test(ua) && /android/i.test(ua);
         var maskTokens = this.mask.split('');
         for (var i = 0; i < maskTokens.length; i++) {
             var c = maskTokens[i];
@@ -393,7 +410,7 @@ var InputMask = (function () {
         }
         return (this.partialPosition ? i : this.firstNonMaskPos);
     };
-    InputMask.prototype.onFocus = function (event) {
+    InputMask.prototype.onInputFocus = function (event) {
         var _this = this;
         if (this.readonly) {
             return;
@@ -415,6 +432,7 @@ var InputMask = (function () {
                 _this.caret(pos);
             }
         }, 10);
+        this.onFocus.emit(event);
     };
     InputMask.prototype.onInput = function (event) {
         if (this.androidChrome)
@@ -456,10 +474,6 @@ var InputMask = (function () {
     };
     return InputMask;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], InputMask.prototype, "mask", void 0);
 __decorate([
     core_1.Input(),
     __metadata("design:type", String)
@@ -527,11 +541,20 @@ __decorate([
 __decorate([
     core_1.Output(),
     __metadata("design:type", core_1.EventEmitter)
+], InputMask.prototype, "onFocus", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", core_1.EventEmitter)
 ], InputMask.prototype, "onBlur", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], InputMask.prototype, "mask", null);
 InputMask = __decorate([
     core_1.Component({
         selector: 'p-inputMask',
-        template: "<input #input pInputText [attr.id]=\"inputId\" [attr.type]=\"type\" [attr.name]=\"name\" [ngStyle]=\"style\" [ngClass]=\"styleClass\" [attr.placeholder]=\"placeholder\"\n        [attr.size]=\"size\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [disabled]=\"disabled\" [readonly]=\"readonly\"\n        (focus)=\"onFocus($event)\" (blur)=\"onInputBlur($event)\" (keydown)=\"onKeyDown($event)\" (keypress)=\"onKeyPress($event)\"\n        (input)=\"onInput($event)\" (paste)=\"handleInputChange($event)\">",
+        template: "<input #input pInputText [attr.id]=\"inputId\" [attr.type]=\"type\" [attr.name]=\"name\" [ngStyle]=\"style\" [ngClass]=\"styleClass\" [attr.placeholder]=\"placeholder\"\n        [attr.size]=\"size\" [attr.maxlength]=\"maxlength\" [attr.tabindex]=\"tabindex\" [disabled]=\"disabled\" [readonly]=\"readonly\"\n        (focus)=\"onInputFocus($event)\" (blur)=\"onInputBlur($event)\" (keydown)=\"onKeyDown($event)\" (keypress)=\"onKeyPress($event)\"\n        (input)=\"onInput($event)\" (paste)=\"handleInputChange($event)\">",
         host: {
             '[class.ui-inputwrapper-filled]': 'filled',
             '[class.ui-inputwrapper-focus]': 'focus'

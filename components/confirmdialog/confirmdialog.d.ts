@@ -1,9 +1,9 @@
-import { ElementRef, AfterViewInit, OnDestroy, Renderer2 } from '@angular/core';
+import { ElementRef, AfterViewInit, OnDestroy, AfterViewChecked, Renderer2 } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
 import { Confirmation } from '../common/confirmation';
 import { ConfirmationService } from '../common/confirmationservice';
 import { Subscription } from 'rxjs/Subscription';
-export declare class ConfirmDialog implements AfterViewInit, OnDestroy {
+export declare class ConfirmDialog implements AfterViewInit, AfterViewChecked, OnDestroy {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
@@ -34,9 +34,11 @@ export declare class ConfirmDialog implements AfterViewInit, OnDestroy {
     contentContainer: any;
     positionInitialized: boolean;
     subscription: Subscription;
+    executePostShowActions: boolean;
     constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2, confirmationService: ConfirmationService);
     visible: boolean;
     ngAfterViewInit(): void;
+    ngAfterViewChecked(): void;
     center(): void;
     enableModality(): void;
     disableModality(): void;

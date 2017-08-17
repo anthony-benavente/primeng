@@ -1,4 +1,4 @@
-import { ElementRef, OnDestroy, Renderer2 } from '@angular/core';
+import { ElementRef, Renderer2 } from '@angular/core';
 import { DomHandler } from '../dom/domhandler';
 import { MenuItem } from '../common/menuitem';
 export declare class MenubarSub {
@@ -12,7 +12,7 @@ export declare class MenubarSub {
     itemClick(event: any, item: MenuItem): void;
     listClick(event: any): void;
 }
-export declare class Menubar implements OnDestroy {
+export declare class Menubar {
     el: ElementRef;
     domHandler: DomHandler;
     renderer: Renderer2;
@@ -20,8 +20,6 @@ export declare class Menubar implements OnDestroy {
     style: any;
     styleClass: string;
     constructor(el: ElementRef, domHandler: DomHandler, renderer: Renderer2);
-    unsubscribe(item: any): void;
-    ngOnDestroy(): void;
 }
 export declare class MenubarModule {
 }

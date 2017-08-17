@@ -13,16 +13,23 @@ var core_1 = require("@angular/core");
 var common_1 = require("@angular/common");
 var domhandler_1 = require("../dom/domhandler");
 var Growl = (function () {
-    function Growl(el, domHandler) {
+    function Growl(el, domHandler, differs) {
         this.el = el;
         this.domHandler = domHandler;
+        this.differs = differs;
         this.life = 3000;
+        this.immutable = true;
+        this.onClick = new core_1.EventEmitter();
         this.onClose = new core_1.EventEmitter();
         this.valueChange = new core_1.EventEmitter();
         this.zIndex = domhandler_1.DomHandler.zindex;
+        this.differ = differs.find([]).create(null);
     }
     Growl.prototype.ngAfterViewInit = function () {
         this.container = this.containerViewChild.nativeElement;
+        if (!this.sticky) {
+            this.initTimeout();
+        }
     };
     Object.defineProperty(Growl.prototype, "value", {
         get: function () {
@@ -30,15 +37,22 @@ var Growl = (function () {
         },
         set: function (val) {
             this._value = val;
-            if (this.container) {
+            if (this.container && this.immutable) {
                 this.handleValueChange();
             }
         },
         enumerable: true,
         configurable: true
     });
+    Growl.prototype.ngDoCheck = function () {
+        if (!this.immutable && this.container) {
+            var changes = this.differ.diff(this.value);
+            if (changes) {
+                this.handleValueChange();
+            }
+        }
+    };
     Growl.prototype.handleValueChange = function () {
-        var _this = this;
         if (this.preventRerender) {
             this.preventRerender = false;
             return;
@@ -46,13 +60,17 @@ var Growl = (function () {
         this.zIndex = ++domhandler_1.DomHandler.zindex;
         this.domHandler.fadeIn(this.container, 250);
         if (!this.sticky) {
-            if (this.timeout) {
-                clearTimeout(this.timeout);
-            }
-            this.timeout = setTimeout(function () {
-                _this.removeAll();
-            }, this.life);
+            this.initTimeout();
         }
+    };
+    Growl.prototype.initTimeout = function () {
+        var _this = this;
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+        this.timeout = setTimeout(function () {
+            _this.removeAll();
+        }, this.life);
     };
     Growl.prototype.remove = function (index, msgel) {
         var _this = this;
@@ -60,8 +78,13 @@ var Growl = (function () {
         setTimeout(function () {
             _this.preventRerender = true;
             _this.onClose.emit({ message: _this.value[index] });
-            _this._value = _this.value.filter(function (val, i) { return i != index; });
-            _this.valueChange.emit(_this._value);
+            if (_this.immutable) {
+                _this._value = _this.value.filter(function (val, i) { return i != index; });
+                _this.valueChange.emit(_this._value);
+            }
+            else {
+                _this._value.splice(index, 1);
+            }
         }, 250);
     };
     Growl.prototype.removeAll = function () {
@@ -70,10 +93,18 @@ var Growl = (function () {
             this.domHandler.fadeOut(this.container, 250);
             setTimeout(function () {
                 _this.value.forEach(function (msg, index) { return _this.onClose.emit({ message: _this.value[index] }); });
-                _this.value = [];
-                _this.valueChange.emit(_this.value);
+                if (_this.immutable) {
+                    _this.value = [];
+                    _this.valueChange.emit(_this.value);
+                }
+                else {
+                    _this.value.splice(0, _this.value.length);
+                }
             }, 250);
         }
+    };
+    Growl.prototype.onMessageClick = function (i) {
+        this.onClick.emit({ message: this.value[i] });
     };
     Growl.prototype.ngOnDestroy = function () {
         if (!this.sticky) {
@@ -99,6 +130,14 @@ __decorate([
     __metadata("design:type", String)
 ], Growl.prototype, "styleClass", void 0);
 __decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean)
+], Growl.prototype, "immutable", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", core_1.EventEmitter)
+], Growl.prototype, "onClick", void 0);
+__decorate([
     core_1.Output(),
     __metadata("design:type", core_1.EventEmitter)
 ], Growl.prototype, "onClose", void 0);
@@ -118,10 +157,10 @@ __decorate([
 Growl = __decorate([
     core_1.Component({
         selector: 'p-growl',
-        template: "\n        <div #container [ngClass]=\"'ui-growl ui-widget'\" [style.zIndex]=\"zIndex\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div #msgel *ngFor=\"let msg of value;let i = index\" class=\"ui-growl-item-container ui-state-highlight ui-corner-all ui-shadow\" aria-live=\"polite\"\n                [ngClass]=\"{'ui-growl-message-info':msg.severity == 'info','ui-growl-message-warn':msg.severity == 'warn',\n                    'ui-growl-message-error':msg.severity == 'error','ui-growl-message-success':msg.severity == 'success'}\">\n                <div class=\"ui-growl-item\">\n                     <div class=\"ui-growl-icon-close fa fa-close\" (click)=\"remove(i,msgel)\"></div>\n                     <span class=\"ui-growl-image fa fa-2x\"\n                        [ngClass]=\"{'fa-info-circle':msg.severity == 'info','fa-exclamation-circle':msg.severity == 'warn',\n                                'fa-close':msg.severity == 'error','fa-check':msg.severity == 'success'}\"></span>\n                     <div class=\"ui-growl-message\">\n                        <span class=\"ui-growl-title\">{{msg.summary}}</span>\n                        <p [innerHTML]=\"msg.detail\"></p>\n                     </div>\n                     <div style=\"clear: both;\"></div>\n                </div>\n            </div>\n        </div>\n    ",
+        template: "\n        <div #container [ngClass]=\"'ui-growl ui-widget'\" [style.zIndex]=\"zIndex\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <div #msgel *ngFor=\"let msg of value;let i = index\" class=\"ui-growl-item-container ui-state-highlight ui-corner-all ui-shadow\" aria-live=\"polite\"\n                [ngClass]=\"{'ui-growl-message-info':msg.severity == 'info','ui-growl-message-warn':msg.severity == 'warn',\n                    'ui-growl-message-error':msg.severity == 'error','ui-growl-message-success':msg.severity == 'success'}\" (click)=\"onMessageClick(i)\">\n                <div class=\"ui-growl-item\">\n                     <div class=\"ui-growl-icon-close fa fa-close\" (click)=\"remove(i,msgel)\"></div>\n                     <span class=\"ui-growl-image fa fa-2x\"\n                        [ngClass]=\"{'fa-info-circle':msg.severity == 'info','fa-exclamation-circle':msg.severity == 'warn',\n                                'fa-close':msg.severity == 'error','fa-check':msg.severity == 'success'}\"></span>\n                     <div class=\"ui-growl-message\">\n                        <span class=\"ui-growl-title\">{{msg.summary}}</span>\n                        <p [innerHTML]=\"msg.detail\"></p>\n                     </div>\n                     <div style=\"clear: both;\"></div>\n                </div>\n            </div>\n        </div>\n    ",
         providers: [domhandler_1.DomHandler]
     }),
-    __metadata("design:paramtypes", [core_1.ElementRef, domhandler_1.DomHandler])
+    __metadata("design:paramtypes", [core_1.ElementRef, domhandler_1.DomHandler, core_1.IterableDiffers])
 ], Growl);
 exports.Growl = Growl;
 var GrowlModule = (function () {

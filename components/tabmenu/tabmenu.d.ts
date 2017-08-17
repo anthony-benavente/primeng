@@ -1,6 +1,5 @@
-import { OnDestroy } from '@angular/core';
 import { MenuItem } from '../common/menuitem';
-export declare class TabMenu implements OnDestroy {
+export declare class TabMenu {
     model: MenuItem[];
     activeItem: MenuItem;
     popup: boolean;
@@ -8,8 +7,6 @@ export declare class TabMenu implements OnDestroy {
     styleClass: string;
     ngOnInit(): void;
     itemClick(event: Event, item: MenuItem): void;
-    ngOnDestroy(): void;
-    unsubscribe(item: any): void;
 }
 export declare class TabMenuModule {
 }
