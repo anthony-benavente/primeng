@@ -50,35 +50,12 @@ var MegaMenu = (function () {
             event.preventDefault();
         }
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new core_1.EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });
         }
         this.activeItem = null;
-    };
-    MegaMenu.prototype.unsubscribe = function (item) {
-        if (item.eventEmitter) {
-            item.eventEmitter.unsubscribe();
-        }
-        if (item.items) {
-            for (var _i = 0, _a = item.items; _i < _a.length; _i++) {
-                var childItem = _a[_i];
-                this.unsubscribe(childItem);
-            }
-        }
-    };
-    MegaMenu.prototype.ngOnDestroy = function () {
-        if (this.model) {
-            for (var _i = 0, _a = this.model; _i < _a.length; _i++) {
-                var item = _a[_i];
-                this.unsubscribe(item);
-            }
-        }
     };
     MegaMenu.prototype.getColumnClass = function (menuitem) {
         var length = menuitem.items ? menuitem.items.length : 0;

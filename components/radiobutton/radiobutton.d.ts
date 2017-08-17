@@ -1,7 +1,7 @@
-import { AfterViewInit, ElementRef, EventEmitter, ChangeDetectorRef } from '@angular/core';
+import { ElementRef, EventEmitter, ChangeDetectorRef } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 export declare const RADIO_VALUE_ACCESSOR: any;
-export declare class RadioButton implements ControlValueAccessor, AfterViewInit {
+export declare class RadioButton implements ControlValueAccessor {
     private cd;
     value: any;
     name: string;
@@ -13,13 +13,11 @@ export declare class RadioButton implements ControlValueAccessor, AfterViewInit 
     styleClass: string;
     onClick: EventEmitter<any>;
     inputViewChild: ElementRef;
-    input: HTMLInputElement;
     onModelChange: Function;
     onModelTouched: Function;
     checked: boolean;
     focused: boolean;
     constructor(cd: ChangeDetectorRef);
-    ngAfterViewInit(): void;
     handleClick(): void;
     select(): void;
     writeValue(value: any): void;

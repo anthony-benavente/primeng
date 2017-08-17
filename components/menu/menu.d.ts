@@ -29,7 +29,6 @@ export declare class Menu implements AfterViewInit, OnDestroy {
     itemClick(event: any, item: MenuItem): void;
     ngOnDestroy(): void;
     hasSubMenu(): boolean;
-    unsubscribe(item: any): void;
 }
 export declare class MenuModule {
 }

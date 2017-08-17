@@ -1,7 +1,8 @@
-import { ElementRef, AfterViewInit, AfterContentInit, EventEmitter, QueryList, TemplateRef } from '@angular/core';
+import { ElementRef, AfterViewInit, AfterContentInit, DoCheck, EventEmitter, QueryList, TemplateRef, IterableDiffers } from '@angular/core';
 import { BlockableUI } from '../common/blockableui';
-export declare class DataGrid implements AfterViewInit, AfterContentInit, BlockableUI {
+export declare class DataGrid implements AfterViewInit, AfterContentInit, DoCheck, BlockableUI {
     el: ElementRef;
+    differs: IterableDiffers;
     paginator: boolean;
     rows: number;
     totalRecords: number;
@@ -15,6 +16,7 @@ export declare class DataGrid implements AfterViewInit, AfterContentInit, Blocka
     paginatorPosition: string;
     alwaysShowPaginator: boolean;
     trackBy: Function;
+    immutable: boolean;
     onPage: EventEmitter<any>;
     header: any;
     footer: any;
@@ -24,11 +26,13 @@ export declare class DataGrid implements AfterViewInit, AfterContentInit, Blocka
     dataToRender: any[];
     first: number;
     page: number;
-    constructor(el: ElementRef);
+    differ: any;
+    constructor(el: ElementRef, differs: IterableDiffers);
     ngAfterViewInit(): void;
     ngAfterContentInit(): void;
     value: any[];
     handleDataChange(): void;
+    ngDoCheck(): void;
     updatePaginator(): void;
     paginate(event: any): void;
     updateDataToRender(datasource: any): void;

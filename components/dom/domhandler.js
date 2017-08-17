@@ -259,13 +259,11 @@ var DomHandler = (function () {
         return { width: w, height: h };
     };
     DomHandler.prototype.getOffset = function (el) {
-        var x = el.offsetLeft;
-        var y = el.offsetTop;
-        while (el = el.offsetParent) {
-            x += el.offsetLeft;
-            y += el.offsetTop;
-        }
-        return { left: x, top: y };
+        var rect = el.getBoundingClientRect();
+        return {
+            top: rect.top + document.body.scrollTop,
+            left: rect.left + document.body.scrollLeft
+        };
     };
     DomHandler.prototype.getUserAgent = function () {
         return navigator.userAgent;
@@ -324,6 +322,24 @@ var DomHandler = (function () {
     };
     DomHandler.prototype.invokeElementMethod = function (element, methodName, args) {
         element[methodName].apply(element, args);
+    };
+    DomHandler.prototype.clearSelection = function () {
+        if (window.getSelection) {
+            if (window.getSelection().empty) {
+                window.getSelection().empty();
+            }
+            else if (window.getSelection().removeAllRanges && window.getSelection().rangeCount > 0 && window.getSelection().getRangeAt(0).getClientRects().length > 0) {
+                window.getSelection().removeAllRanges();
+            }
+        }
+        else if (document['selection'] && document['selection'].empty) {
+            try {
+                document['selection'].empty();
+            }
+            catch (error) {
+                //ignore IE bug
+            }
+        }
     };
     return DomHandler;
 }());

@@ -24,6 +24,10 @@ var Tooltip = (function () {
     }
     Tooltip.prototype.onMouseEnter = function (e) {
         if (this.tooltipEvent === 'hover') {
+            if (this.hideTimeout) {
+                clearTimeout(this.hideTimeout);
+                this.destroy();
+            }
             this.activate();
         }
     };
@@ -73,7 +77,7 @@ var Tooltip = (function () {
             if (this.active) {
                 if (this._text) {
                     if (this.container && this.container.offsetParent)
-                        this.tooltipText.innerHTML = this._text;
+                        this.updateText();
                     else
                         this.show();
                 }
@@ -92,10 +96,7 @@ var Tooltip = (function () {
         this.container.appendChild(tooltipArrow);
         this.tooltipText = document.createElement('div');
         this.tooltipText.className = 'ui-tooltip-text ui-shadow ui-corner-all';
-        if (this.escape)
-            this.tooltipText.appendChild(document.createTextNode(this.text));
-        else
-            this.tooltipText.innerHTML = this.text;
+        this.updateText();
         if (this.positionStyle) {
             this.container.style.position = this.positionStyle;
         }
@@ -123,6 +124,15 @@ var Tooltip = (function () {
     };
     Tooltip.prototype.hide = function () {
         this.destroy();
+    };
+    Tooltip.prototype.updateText = function () {
+        if (this.escape) {
+            this.tooltipText.innerHTML = '';
+            this.tooltipText.appendChild(document.createTextNode(this._text));
+        }
+        else {
+            this.tooltipText.innerHTML = this._text;
+        }
     };
     Tooltip.prototype.align = function () {
         var position = this.tooltipPosition;
@@ -172,6 +182,7 @@ var Tooltip = (function () {
         return { left: targetLeft, top: targetTop };
     };
     Tooltip.prototype.alignRight = function () {
+        this.preAlign();
         this.container.className = 'ui-tooltip ui-widget ui-tooltip-right';
         var hostOffset = this.getHostOffset();
         var left = hostOffset.left + this.domHandler.getOuterWidth(this.el.nativeElement);
@@ -180,6 +191,7 @@ var Tooltip = (function () {
         this.container.style.top = top + 'px';
     };
     Tooltip.prototype.alignLeft = function () {
+        this.preAlign();
         this.container.className = 'ui-tooltip ui-widget ui-tooltip-left';
         var hostOffset = this.getHostOffset();
         var left = hostOffset.left - this.domHandler.getOuterWidth(this.container);
@@ -188,6 +200,7 @@ var Tooltip = (function () {
         this.container.style.top = top + 'px';
     };
     Tooltip.prototype.alignTop = function () {
+        this.preAlign();
         this.container.className = 'ui-tooltip ui-widget ui-tooltip-top';
         var hostOffset = this.getHostOffset();
         var left = hostOffset.left + (this.domHandler.getOuterWidth(this.el.nativeElement) - this.domHandler.getOuterWidth(this.container)) / 2;
@@ -196,12 +209,17 @@ var Tooltip = (function () {
         this.container.style.top = top + 'px';
     };
     Tooltip.prototype.alignBottom = function () {
+        this.preAlign();
         this.container.className = 'ui-tooltip ui-widget ui-tooltip-bottom';
         var hostOffset = this.getHostOffset();
         var left = hostOffset.left + (this.domHandler.getOuterWidth(this.el.nativeElement) - this.domHandler.getOuterWidth(this.container)) / 2;
         var top = hostOffset.top + this.domHandler.getOuterHeight(this.el.nativeElement);
         this.container.style.left = left + 'px';
         this.container.style.top = top + 'px';
+    };
+    Tooltip.prototype.preAlign = function () {
+        this.container.style.left = -999 + 'px';
+        this.container.style.top = -999 + 'px';
     };
     Tooltip.prototype.isOutOfBounds = function () {
         var offset = this.container.getBoundingClientRect();

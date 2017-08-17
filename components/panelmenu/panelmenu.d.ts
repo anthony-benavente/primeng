@@ -11,8 +11,6 @@ export declare class PanelMenu extends BasePanelMenuItem {
     style: any;
     styleClass: string;
     animating: boolean;
-    unsubscribe(item: any): void;
-    ngOnDestroy(): void;
     handleClick(event: any, item: any): void;
     onToggleDone(): void;
 }

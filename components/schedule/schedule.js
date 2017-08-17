@@ -136,7 +136,7 @@ var Schedule = (function () {
                 });
             },
             eventDrop: function (event, delta, revertFunc, jsEvent, ui, view) {
-                _this.updateEvent(event);
+                _this._updateEvent(event);
                 _this.onEventDrop.emit({
                     'event': event,
                     'delta': delta,
@@ -160,7 +160,7 @@ var Schedule = (function () {
                 });
             },
             eventResize: function (event, delta, revertFunc, jsEvent, ui, view) {
-                _this.updateEvent(event);
+                _this._updateEvent(event);
                 _this.onEventResize.emit({
                     'event': event,
                     'delta': delta,
@@ -251,7 +251,10 @@ var Schedule = (function () {
     Schedule.prototype.getDate = function () {
         return this.schedule.fullCalendar('getDate');
     };
-    Schedule.prototype.findEvent = function (id) {
+    Schedule.prototype.updateEvent = function (event) {
+        this.schedule.fullCalendar('updateEvent', event);
+    };
+    Schedule.prototype._findEvent = function (id) {
         var event;
         if (this.events) {
             for (var _i = 0, _a = this.events; _i < _a.length; _i++) {
@@ -264,8 +267,8 @@ var Schedule = (function () {
         }
         return event;
     };
-    Schedule.prototype.updateEvent = function (event) {
-        var sourceEvent = this.findEvent(event.id);
+    Schedule.prototype._updateEvent = function (event) {
+        var sourceEvent = this._findEvent(event.id);
         if (sourceEvent) {
             sourceEvent.start = event.start.format();
             if (event.end) {

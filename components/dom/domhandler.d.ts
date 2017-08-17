@@ -31,8 +31,8 @@ export declare class DomHandler {
     getWidth(el: any): number;
     getViewport(): any;
     getOffset(el: any): {
-        left: any;
         top: any;
+        left: any;
     };
     getUserAgent(): string;
     isIE(): boolean;
@@ -41,4 +41,5 @@ export declare class DomHandler {
     isElement(obj: any): boolean;
     calculateScrollbarWidth(): number;
     invokeElementMethod(element: any, methodName: string, args?: any[]): void;
+    clearSelection(): void;
 }

@@ -24,11 +24,7 @@ var Breadcrumb = (function () {
             event.preventDefault();
         }
         if (item.command) {
-            if (!item.eventEmitter) {
-                item.eventEmitter = new core_1.EventEmitter();
-                item.eventEmitter.subscribe(item.command);
-            }
-            item.eventEmitter.emit({
+            item.command({
                 originalEvent: event,
                 item: item
             });
@@ -37,16 +33,6 @@ var Breadcrumb = (function () {
     Breadcrumb.prototype.onHomeClick = function (event) {
         if (this.home) {
             this.itemClick(event, this.home);
-        }
-    };
-    Breadcrumb.prototype.ngOnDestroy = function () {
-        if (this.model) {
-            for (var _i = 0, _a = this.model; _i < _a.length; _i++) {
-                var item = _a[_i];
-                if (item.eventEmitter) {
-                    item.eventEmitter.unsubscribe();
-                }
-            }
         }
     };
     return Breadcrumb;

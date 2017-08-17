@@ -32,6 +32,7 @@ export declare class Tooltip implements OnDestroy {
     create(): void;
     show(): void;
     hide(): void;
+    updateText(): void;
     align(): void;
     getHostOffset(): {
         left: any;
@@ -41,6 +42,7 @@ export declare class Tooltip implements OnDestroy {
     alignLeft(): void;
     alignTop(): void;
     alignBottom(): void;
+    preAlign(): void;
     isOutOfBounds(): boolean;
     bindDocumentResizeListener(): void;
     unbindDocumentResizeListener(): void;

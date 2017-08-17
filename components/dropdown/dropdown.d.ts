@@ -28,6 +28,8 @@ export declare class Dropdown implements OnInit, AfterViewInit, AfterContentInit
     inputId: string;
     dataKey: string;
     filterBy: string;
+    lazy: boolean;
+    autofocus: boolean;
     onChange: EventEmitter<any>;
     onFocus: EventEmitter<any>;
     onBlur: EventEmitter<any>;

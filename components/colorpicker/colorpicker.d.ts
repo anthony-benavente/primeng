@@ -23,6 +23,7 @@ export declare class ColorPicker implements ControlValueAccessor, AfterViewCheck
     hueHandleViewChild: ElementRef;
     inputViewChild: ElementRef;
     value: any;
+    inputBgColor: string;
     shown: boolean;
     panelVisible: boolean;
     defaultColor: string;

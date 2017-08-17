@@ -42,7 +42,6 @@ export declare class SlideMenu implements AfterViewInit, OnDestroy {
     toggle(event: any): void;
     show(event: any): void;
     hide(): void;
-    unsubscribe(item: any): void;
     onClick(event: any): void;
     goBack(): void;
     ngOnDestroy(): void;

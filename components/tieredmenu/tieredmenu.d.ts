@@ -29,7 +29,8 @@ export declare class TieredMenu implements AfterViewInit, OnDestroy {
     toggle(event: Event): void;
     show(event: Event): void;
     hide(): void;
-    unsubscribe(item: any): void;
+    unbindDocumentClickListener(): void;
+    bindDocumentClickListener(): void;
     ngOnDestroy(): void;
 }
 export declare class TieredMenuModule {
