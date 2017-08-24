@@ -18,7 +18,6 @@ var TabViewNav = (function () {
         this.onTabClick = new core_1.EventEmitter();
         this.onTabCloseClick = new core_1.EventEmitter();
         this.onTabDropSuccess = new core_1.EventEmitter();
-<<<<<<< HEAD
         this.onContextMenu = new core_1.EventEmitter();
     }
     TabViewNav.prototype.contextMenu = function (e, tab) {
@@ -27,9 +26,6 @@ var TabViewNav = (function () {
             tab: tab
         });
     };
-=======
-    }
->>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
     TabViewNav.prototype.getDefaultHeaderClass = function (tab) {
         var styleClass = 'ui-state-default ui-corner-' + this.orientation;
         if (tab && tab.headerStyleClass) {
@@ -76,13 +72,10 @@ __decorate([
     core_1.Output(),
     __metadata("design:type", core_1.EventEmitter)
 ], TabViewNav.prototype, "onTabDropSuccess", void 0);
-<<<<<<< HEAD
 __decorate([
     core_1.Output(),
     __metadata("design:type", Object)
 ], TabViewNav.prototype, "onContextMenu", void 0);
-=======
->>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
 TabViewNav = __decorate([
     core_1.Component({
         selector: '[p-tabViewNav]',
@@ -93,11 +86,7 @@ TabViewNav = __decorate([
             '[class.ui-widget-header]': 'true',
             '[class.ui-corner-all]': 'true'
         },
-<<<<<<< HEAD
         template: "\n        <ng-template ngFor let-tab [ngForOf]=\"tabs\" let-i=\"index\" >\n            <li dnd-sortable [sortableIndex]=\"i\" [class]=\"getDefaultHeaderClass(tab)\" [ngStyle]=\"tab.headerStyle\" role=\"tab\"\n                [ngClass]=\"{'ui-tabview-selected ui-state-active': tab.selected, 'ui-state-disabled': tab.disabled}\"\n                (click)=\"clickTab($event,tab)\" (onDropSuccess)=\"tabDrop($event)\" [id]=\"i\"\n                [attr.aria-expanded]=\"tab.selected\" [attr.aria-selected]=\"tab.selected\" (contextmenu)=\"contextMenu($event, tab)\">\n                <a href=\"#\">\n                    <span class=\"ui-tabview-left-icon fa\" [ngClass]=\"tab.leftIcon\" *ngIf=\"tab.leftIcon\"></span>\n                    <span class=\"ui-tabview-title\">{{tab.header}}</span>\n                    <span class=\"ui-tabview-right-icon fa\" [ngClass]=\"tab.rightIcon\" *ngIf=\"tab.rightIcon\"></span>\n                </a>\n                <span *ngIf=\"tab.closable\" class=\"ui-tabview-close fa fa-close\" (click)=\"clickClose($event,tab)\"></span>\n            </li> \n        </ng-template>\n    ",
-=======
-        template: "\n        <ng-template ngFor let-tab [ngForOf]=\"tabs\" let-i=\"index\" >\n            <li dnd-sortable [sortableIndex]=\"i\" [class]=\"getDefaultHeaderClass(tab)\" [ngStyle]=\"tab.headerStyle\" role=\"tab\"\n                [ngClass]=\"{'ui-tabview-selected ui-state-active': tab.selected, 'ui-state-disabled': tab.disabled}\"\n                (click)=\"clickTab($event,tab)\" (onDropSuccess)=\"tabDrop($event)\" [id]=\"i\"\n                [attr.aria-expanded]=\"tab.selected\" [attr.aria-selected]=\"tab.selected\">\n                <a href=\"#\">\n                    <span class=\"ui-tabview-left-icon fa\" [ngClass]=\"tab.leftIcon\" *ngIf=\"tab.leftIcon\"></span>\n                    <span class=\"ui-tabview-title\">{{tab.header}}</span>\n                    <span class=\"ui-tabview-right-icon fa\" [ngClass]=\"tab.rightIcon\" *ngIf=\"tab.rightIcon\"></span>\n                </a>\n                <span *ngIf=\"tab.closable\" class=\"ui-tabview-close fa fa-close\" (click)=\"clickClose($event,tab)\"></span>\n            </li>\n        </ng-template>\n    ",
->>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
     })
 ], TabViewNav);
 exports.TabViewNav = TabViewNav;
@@ -157,10 +146,7 @@ var TabView = (function () {
         this.onClose = new core_1.EventEmitter();
         this.onTabOrderChange = new core_1.EventEmitter();
         this.onTabInit = new core_1.EventEmitter();
-<<<<<<< HEAD
         this.onTabRightClick = new core_1.EventEmitter();
-=======
->>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
     }
     TabView.prototype.ngAfterContentInit = function () {
         var _this = this;
@@ -184,12 +170,9 @@ var TabView = (function () {
                 this.tabs[0].selected = true;
         }
     };
-<<<<<<< HEAD
     TabView.prototype.tabRightClick = function (e) {
         this.onTabRightClick.emit(e);
     };
-=======
->>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
     TabView.prototype.open = function (event, tab) {
         if (tab.disabled) {
             if (event) {
@@ -324,13 +307,10 @@ __decorate([
     __metadata("design:type", core_1.EventEmitter)
 ], TabView.prototype, "onTabInit", void 0);
 __decorate([
-<<<<<<< HEAD
     core_1.Output(),
     __metadata("design:type", Object)
 ], TabView.prototype, "onTabRightClick", void 0);
 __decorate([
-=======
->>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
     core_1.Input(),
     __metadata("design:type", Number),
     __metadata("design:paramtypes", [Number])
@@ -338,11 +318,7 @@ __decorate([
 TabView = __decorate([
     core_1.Component({
         selector: 'p-tabView',
-<<<<<<< HEAD
         template: "\n        <div [ngClass]=\"'ui-tabview ui-widget ui-widget-content ui-corner-all ui-tabview-' + orientation\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <ul dnd-sortable-container p-tabViewNav role=\"tablist\" *ngIf=\"orientation!='bottom'\" [tabs]=\"tabs\" [orientation]=\"orientation\" \n                (onTabClick)=\"open($event.originalEvent, $event.tab)\" (onTabCloseClick)=\"close($event.originalEvent, $event.tab)\" [sortableData]=\"tabs\"\n                (onTabDropSuccess)=\"onDropSuccess($event)\" (onContextMenu)=\"tabRightClick($event)\"></ul>\n            <div class=\"ui-tabview-panels\">\n                <ng-content></ng-content>\n            </div>\n            <ul p-tabViewNav dnd-sortable-container role=\"tablist\" *ngIf=\"orientation=='bottom'\" [sortableData]=\"tabs\" [tabs]=\"tabs\" [orientation]=\"orientation\"\n                (onTabClick)=\"open($event.originalEvent, $event.tab)\" (onTabCloseClick)=\"close($event.originalEvent, $event.tab)\"\n                (onTabDropSuccess)=\"onDropSuccess($event)\"></ul>\n        </div>\n    ",
-=======
-        template: "\n        <div [ngClass]=\"'ui-tabview ui-widget ui-widget-content ui-corner-all ui-tabview-' + orientation\" [ngStyle]=\"style\" [class]=\"styleClass\">\n            <ul dnd-sortable-container p-tabViewNav role=\"tablist\" *ngIf=\"orientation!='bottom'\" [tabs]=\"tabs\" [orientation]=\"orientation\" \n                (onTabClick)=\"open($event.originalEvent, $event.tab)\" (onTabCloseClick)=\"close($event.originalEvent, $event.tab)\" [sortableData]=\"tabs\"\n                (onTabDropSuccess)=\"onDropSuccess($event)\"></ul>\n            <div class=\"ui-tabview-panels\">\n                <ng-content></ng-content>\n            </div>\n            <ul p-tabViewNav dnd-sortable-container role=\"tablist\" *ngIf=\"orientation=='bottom'\" [sortableData]=\"tabs\" [tabs]=\"tabs\" [orientation]=\"orientation\"\n                (onTabClick)=\"open($event.originalEvent, $event.tab)\" (onTabCloseClick)=\"close($event.originalEvent, $event.tab)\"\n                (onTabDropSuccess)=\"onDropSuccess($event)\"></ul>\n        </div>\n    ",
->>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
     }),
     __metadata("design:paramtypes", [core_1.ElementRef])
 ], TabView);
