@@ -3502,6 +3502,7 @@ button.ui-button::-moz-focus-inner {
     cursor: pointer;
 }
 
+<<<<<<< HEAD
 .ui-overlaypanel {
     padding: 0;
     margin: 0;
@@ -3520,6 +3521,8 @@ button.ui-button::-moz-focus-inner {
     -webkit-border-radius: 100%;
     border-radius: 100%;
 }
+=======
+>>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
 .ui-paginator {
     margin: 0;
     text-align: center;
@@ -3576,6 +3579,27 @@ button.ui-button::-moz-focus-inner {
 .ui-paginator a.ui-state-disabled {
     outline: 0 none;
 }
+<<<<<<< HEAD
+=======
+.ui-overlaypanel {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+}
+
+.ui-overlaypanel-content {
+    padding: 0.5em 1em;
+}
+
+.ui-overlaypanel-close {
+    position: absolute;
+    top: -.5em;
+    right: -.5em;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+}
+>>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
 .ui-panel {
 	padding: 0.2em;
 }
@@ -3629,6 +3653,7 @@ button.ui-button::-moz-focus-inner {
 .ui-password-panel-overlay { 
     position: absolute; 
 }
+<<<<<<< HEAD
 .ui-radiobutton {
     display:inline-block;
     cursor: pointer;
@@ -3657,6 +3682,8 @@ button.ui-button::-moz-focus-inner {
     vertical-align: middle;
     display: inline-block;
 }
+=======
+>>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
 .ui-picklist > div {
     float: left;
 }
@@ -3889,6 +3916,37 @@ button.ui-button::-moz-focus-inner {
     display: none;
     font-weight: bold;
 }
+<<<<<<< HEAD
+=======
+.ui-radiobutton {
+    display:inline-block;
+    cursor: pointer;
+    vertical-align: middle;
+    margin-right: .25em;
+}
+
+.ui-radiobutton-box {
+    width: 1.125em;
+    height: 1.125em;
+    line-height: 1.125em;
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+    text-align: center;
+}
+
+.ui-radiobutton-icon {
+    display: block;
+    font-size: .5em;
+    line-height: inherit;
+    margin-top: -1px;
+}
+ 
+.ui-radiobutton, .ui-radiobutton-label {
+    vertical-align: middle;
+    display: inline-block;
+}
+>>>>>>> 6ecf3ef6ea18e17304812e1f25ac8641f3dcdb58
 .ui-fluid .fc .ui-button {
     width: auto;
 }
