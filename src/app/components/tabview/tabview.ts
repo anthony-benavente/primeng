@@ -17,7 +17,7 @@ import { DndModule } from 'ng2-dnd';
             <li dnd-sortable [sortableIndex]="i" [class]="getDefaultHeaderClass(tab)" [ngStyle]="tab.headerStyle" role="tab"
                 [ngClass]="{'ui-tabview-selected ui-state-active': tab.selected, 'ui-state-disabled': tab.disabled}"
                 (click)="clickTab($event,tab)" (onDropSuccess)="tabDrop($event)" [id]="i"
-                [attr.aria-expanded]="tab.selected" [attr.aria-selected]="tab.selected">
+                [attr.aria-expanded]="tab.selected" [attr.aria-selected]="tab.selected" (contextmenu)="contextMenu($event, tab)">
                 <a href="#">
                     <span class="ui-tabview-left-icon fa" [ngClass]="tab.leftIcon" *ngIf="tab.leftIcon"></span>
                     <span class="ui-tabview-title">{{tab.header}}</span>
@@ -38,6 +38,15 @@ export class TabViewNav {
     @Output() onTabCloseClick: EventEmitter<any> = new EventEmitter();
     
     @Output() onTabDropSuccess: EventEmitter<any> = new EventEmitter();
+
+    @Output() onContextMenu = new EventEmitter();
+
+    contextMenu(e: any, tab: TabPanel) {
+        this.onContextMenu.emit({
+            event: e,
+            tab: tab
+        });
+    }
 
     getDefaultHeaderClass(tab:TabPanel) {
         let styleClass = 'ui-state-default ui-corner-' + this.orientation; 
@@ -108,7 +117,7 @@ export class TabPanel {
         <div [ngClass]="'ui-tabview ui-widget ui-widget-content ui-corner-all ui-tabview-' + orientation" [ngStyle]="style" [class]="styleClass">
             <ul dnd-sortable-container p-tabViewNav role="tablist" *ngIf="orientation!='bottom'" [tabs]="tabs" [orientation]="orientation" 
                 (onTabClick)="open($event.originalEvent, $event.tab)" (onTabCloseClick)="close($event.originalEvent, $event.tab)" [sortableData]="tabs"
-                (onTabDropSuccess)="onDropSuccess($event)"></ul>
+                (onTabDropSuccess)="onDropSuccess($event)" (onContextMenu)="tabRightClick($event)"></ul>
             <div class="ui-tabview-panels">
                 <ng-content></ng-content>
             </div>
@@ -139,6 +148,8 @@ export class TabView implements AfterContentInit,BlockableUI {
     @Output() onTabOrderChange: EventEmitter<any> = new EventEmitter();
 
     @Output() onTabInit: EventEmitter<any> = new EventEmitter();
+
+    @Output() onTabRightClick = new EventEmitter();
     
     initialized: boolean;
     
@@ -171,6 +182,10 @@ export class TabView implements AfterContentInit,BlockableUI {
             else 
                 this.tabs[0].selected = true;
         }
+    }
+
+    tabRightClick(e: any) {
+        this.onTabRightClick.emit(e);
     }
             
     open(event: Event, tab: TabPanel) {

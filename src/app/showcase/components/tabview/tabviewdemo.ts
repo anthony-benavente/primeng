@@ -12,4 +12,8 @@ export class TabViewDemo {
         this.msgs = [];
         this.msgs.push({severity:'info', summary:'Tab Expanded', detail: 'Index: ' + event.index});
     }
+
+    onContextMenu(e: any) {
+        console.log(e);
+    }
 }
