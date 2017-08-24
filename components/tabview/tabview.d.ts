@@ -6,6 +6,8 @@ export declare class TabViewNav {
     onTabClick: EventEmitter<any>;
     onTabCloseClick: EventEmitter<any>;
     onTabDropSuccess: EventEmitter<any>;
+    onContextMenu: EventEmitter<{}>;
+    contextMenu(e: any, tab: TabPanel): void;
     getDefaultHeaderClass(tab: TabPanel): string;
     clickTab(event: any, tab: TabPanel): void;
     clickClose(event: any, tab: TabPanel): void;
@@ -36,12 +38,14 @@ export declare class TabView implements AfterContentInit, BlockableUI {
     onClose: EventEmitter<any>;
     onTabOrderChange: EventEmitter<any>;
     onTabInit: EventEmitter<any>;
+    onTabRightClick: EventEmitter<{}>;
     initialized: boolean;
     tabs: TabPanel[];
     private _activeIndex;
     constructor(el: ElementRef);
     ngAfterContentInit(): void;
     initTabs(): void;
+    tabRightClick(e: any): void;
     open(event: Event, tab: TabPanel): void;
     close(event: Event, tab: TabPanel): void;
     closeTab(tab: TabPanel): void;

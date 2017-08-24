@@ -24,7 +24,7 @@ import { DndModule } from 'ng2-dnd';
                     <span class="ui-tabview-right-icon fa" [ngClass]="tab.rightIcon" *ngIf="tab.rightIcon"></span>
                 </a>
                 <span *ngIf="tab.closable" class="ui-tabview-close fa fa-close" (click)="clickClose($event,tab)"></span>
-            </li>
+            </li> 
         </ng-template>
     `,
 })
